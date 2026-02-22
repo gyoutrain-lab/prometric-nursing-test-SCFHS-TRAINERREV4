@@ -155,7 +155,221 @@ const questions = [
     clinicalPearl: "Feed sitting up."
   }
 },
-
+<!-- CONTINUE QUESTIONS 31–50 -->
+<script>
+questions.push(
+{
+  q: "A client with diabetes reports dizziness and sweating. What is the nurse’s FIRST action?",
+  options: [
+    { text: "Check blood glucose level", tag: "SCFHS" },
+    { text: "Administer insulin", tag: "SAFE_DELAY" },
+    { text: "Encourage ambulation", tag: "NCLEX" },
+    { text: "Document findings", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Symptoms suggest hypoglycemia requiring immediate confirmation.",
+    howPathophysiology: "Low blood glucose deprives the brain of energy.",
+    examPriority: "Assessment precedes intervention.",
+    trapAnalysis: {
+      SAFE_DELAY: "Insulin may worsen hypoglycemia.",
+      NCLEX: "Activity increases glucose use.",
+      STR: "Documentation is not priority."
+    },
+    clinicalPearl: "Sweaty + dizzy diabetic = check sugar."
+  }
+},
+{
+  q: "Which finding best indicates dehydration?",
+  options: [
+    { text: "Poor skin turgor", tag: "SCFHS" },
+    { text: "Bounding pulse", tag: "SAFE_DELAY" },
+    { text: "Crackles in lungs", tag: "NCLEX" },
+    { text: "Peripheral edema", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Loss of skin elasticity reflects volume depletion.",
+    howPathophysiology: "Reduced interstitial fluid decreases tissue recoil.",
+    examPriority: "Early recognition prevents shock.",
+    trapAnalysis: {
+      SAFE_DELAY: "Bounding pulse suggests fluid excess.",
+      NCLEX: "Crackles indicate overload.",
+      STR: "Edema indicates retention."
+    },
+    clinicalPearl: "Dry skin, slow recoil = dehydration."
+  }
+},
+{
+  q: "A client on opioid therapy is at greatest risk for which complication?",
+  options: [
+    { text: "Respiratory depression", tag: "SCFHS" },
+    { text: "Hypertension", tag: "SAFE_DELAY" },
+    { text: "Diarrhea", tag: "NCLEX" },
+    { text: "Polyuria", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Opioids suppress the respiratory center.",
+    howPathophysiology: "Reduced brainstem responsiveness lowers respiratory rate.",
+    examPriority: "Airway and breathing are critical.",
+    trapAnalysis: {
+      SAFE_DELAY: "Opioids usually lower BP.",
+      NCLEX: "Constipation is more common.",
+      STR: "Urine output is not affected."
+    },
+    clinicalPearl: "Opioids = watch respirations."
+  }
+},
+{
+  q: "Which position best promotes lung expansion?",
+  options: [
+    { text: "High Fowler’s position", tag: "SCFHS" },
+    { text: "Supine position", tag: "SAFE_DELAY" },
+    { text: "Trendelenburg position", tag: "NCLEX" },
+    { text: "Prone position", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Upright posture maximizes diaphragmatic movement.",
+    howPathophysiology: "Gravity reduces lung compression.",
+    examPriority: "Optimize oxygenation.",
+    trapAnalysis: {
+      SAFE_DELAY: "Supine limits expansion.",
+      NCLEX: "Trendelenburg worsens breathing.",
+      STR: "Prone is not routine."
+    },
+    clinicalPearl: "Sit up to breathe better."
+  }
+},
+{
+  q: "Which laboratory value requires immediate reporting?",
+  options: [
+    { text: "Potassium 6.1 mEq/L", tag: "SCFHS" },
+    { text: "Sodium 138 mEq/L", tag: "SAFE_DELAY" },
+    { text: "Hemoglobin 13 g/dL", tag: "NCLEX" },
+    { text: "Calcium 9.2 mg/dL", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Severe hyperkalemia can cause fatal arrhythmias.",
+    howPathophysiology: "Elevated potassium disrupts cardiac conduction.",
+    examPriority: "Prevent sudden cardiac arrest.",
+    trapAnalysis: {
+      SAFE_DELAY: "Normal sodium.",
+      NCLEX: "Normal hemoglobin.",
+      STR: "Normal calcium."
+    },
+    clinicalPearl: "High K = heart danger."
+  }
+},
+{
+  q: "Which sign suggests a urinary tract infection?",
+  options: [
+    { text: "Burning on urination", tag: "SCFHS" },
+    { text: "Clear urine", tag: "SAFE_DELAY" },
+    { text: "Decreased frequency", tag: "NCLEX" },
+    { text: "Absence of odor", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Dysuria is a classic UTI symptom.",
+    howPathophysiology: "Inflammation irritates the urinary tract.",
+    examPriority: "Early treatment prevents complications.",
+    trapAnalysis: {
+      SAFE_DELAY: "Clear urine is normal.",
+      NCLEX: "Frequency usually increases.",
+      STR: "Odor may still be present."
+    },
+    clinicalPearl: "Burning pee = think UTI."
+  }
+},
+{
+  q: "A client reports sudden calf pain and swelling. What should the nurse suspect?",
+  options: [
+    { text: "Deep vein thrombosis", tag: "SCFHS" },
+    { text: "Muscle strain", tag: "SAFE_DELAY" },
+    { text: "Peripheral neuropathy", tag: "NCLEX" },
+    { text: "Arterial spasm", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Unilateral pain and swelling are classic DVT signs.",
+    howPathophysiology: "Venous clot obstructs blood return.",
+    examPriority: "Prevent pulmonary embolism.",
+    trapAnalysis: {
+      SAFE_DELAY: "Strain usually bilateral with movement.",
+      NCLEX: "Neuropathy is sensory.",
+      STR: "Arterial issues cause pallor."
+    },
+    clinicalPearl: "One swollen calf = DVT until proven otherwise."
+  }
+},
+{
+  q: "Which nursing action best reduces fall risk?",
+  options: [
+    { text: "Keep bed in lowest position", tag: "SCFHS" },
+    { text: "Apply restraints", tag: "SAFE_DELAY" },
+    { text: "Dim hallway lights", tag: "NCLEX" },
+    { text: "Encourage independent ambulation", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Low bed height minimizes injury risk.",
+    howPathophysiology: "Falls cause fractures and head injury.",
+    examPriority: "Safety first.",
+    trapAnalysis: {
+      SAFE_DELAY: "Restraints increase injury risk.",
+      NCLEX: "Poor lighting increases falls.",
+      STR: "Supervision is needed."
+    },
+    clinicalPearl: "Low bed saves bones."
+  }
+},
+{
+  q: "Which sign indicates effective airway clearance?",
+  options: [
+    { text: "Clear breath sounds", tag: "SCFHS" },
+    { text: "Persistent coughing", tag: "SAFE_DELAY" },
+    { text: "Use of accessory muscles", tag: "NCLEX" },
+    { text: "Cyanosis", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Clear sounds indicate open airways.",
+    howPathophysiology: "Secretions obstruct airflow.",
+    examPriority: "Ensure oxygen delivery.",
+    trapAnalysis: {
+      SAFE_DELAY: "Coughing suggests obstruction.",
+      NCLEX: "Accessory muscles indicate distress.",
+      STR: "Cyanosis = hypoxia."
+    },
+    clinicalPearl: "Clear lungs = clear airway."
+  }
+},
+{
+  q: "Which intervention best prevents aspiration?",
+  options: [
+    { text: "Elevate head of bed during feeding", tag: "SCFHS" },
+    { text: "Encourage rapid swallowing", tag: "SAFE_DELAY" },
+    { text: "Feed client supine", tag: "NCLEX" },
+    { text: "Limit chewing time", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Upright position protects airway.",
+    howPathophysiology: "Gravity prevents food from entering trachea.",
+    examPriority: "Prevent pneumonia.",
+    trapAnalysis: {
+      SAFE_DELAY: "Speed increases aspiration.",
+      NCLEX: "Supine promotes aspiration.",
+      STR: "Chewing supports safety."
+    },
+    clinicalPearl: "Sit up to swallow safely."
+  }
+}
+);
+</script>
 <!-- CONTINUE QUESTIONS 18–30 -->
 <script>
 questions.push(
