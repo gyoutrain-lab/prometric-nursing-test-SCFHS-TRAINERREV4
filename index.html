@@ -2,349 +2,166 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SCFHS Prometric Quiz Engine</title>
-
+<title>SCFHS Classroom Rationale Engine - Level 4</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  margin: 0;
-  padding: 20px;
-}
-.container {
-  max-width: 900px;
-  margin: auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 6px;
-}
-.question {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.option {
-  margin: 6px 0;
-}
-button {
-  margin-top: 15px;
-  padding: 10px 15px;
-}
-.analysis {
-  margin-top: 10px;
-  background: #eef3f7;
-  padding: 10px;
-  border-left: 4px solid #007bff;
-}
-.hidden {
-  display: none;
-}
+body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:0; }
+.container { max-width:1000px; margin:auto; background:#fff; padding:25px; border-radius:8px; box-shadow:0 0px 10px rgba(0,0,0,0.1); }
+h2 { text-align:center; margin-bottom:20px; }
+.option { margin:10px 0; padding:12px; border:1px solid #ccc; border-radius:6px; cursor:pointer; }
+.option:hover { background:#f0f8ff; }
+.correct { background:#d4edda; border-color:#28a745; }
+.incorrect { background:#f8d7da; border-color:#dc3545; }
+.hidden { display:none; }
+.review { margin-top:20px; padding:15px; background:#f9fafb; border-left:5px solid #007bff; }
+.tag { font-size:12px; padding:2px 6px; border-radius:4px; margin-left:6px; }
+.SCFHS { background:#d4edda; }
+.NCLEX { background:#cce5ff; }
+.STR { background:#fff3cd; }
+.SAFE_DELAY { background:#e2e3e5; }
+.progress-container { width:100%; background:#e2e3e5; border-radius:5px; overflow:hidden; margin-bottom:20px; }
+.progress-bar { height:20px; width:0%; background:#007bff; color:#fff; text-align:center; line-height:20px; }
 </style>
 </head>
 
 <body>
 <div class="container">
-  <div id="quiz"></div>
-  <button onclick="nextQuestion()">Next</button>
+<h2>SCFHS Classroom Rationale Engine - Level 4</h2>
+
+<button id="startBtn">Start Quiz</button>
+<div id="quiz" class="hidden"></div>
+<div id="review" class="review hidden"></div>
+<button onclick="nextQuestion()" id="nextBtn" class="hidden">Next Question</button>
+
+<div class="progress-container">
+  <div class="progress-bar" id="progressBar">0%</div>
+</div>
 </div>
 
 <script>
-let questions = [];
-let currentIndex = 0;
-
-/* ===============================
-   CONTINUE QUESTIONS 1–10
-   =============================== */
-
-questions.push(
+// ================================
+// QUESTIONS
+// ================================
+const questions = [
 {
-  q: "A client reports chest pain radiating to the left arm. What is the nurse’s FIRST action?",
+  q: "When a nurse places a febrile infant into cold water, how is heat primarily lost?",
   options: [
-    { text: "Assess vital signs and oxygen saturation", tag: "SCFHS" },
-    { text: "Administer prescribed analgesics", tag: "SAFE_DELAY" },
-    { text: "Encourage the client to rest", tag: "NCLEX" },
-    { text: "Document the complaint", tag: "STR" }
+    { text: "Evaporation", tag: "SAFE_DELAY" },
+    { text: "Convection", tag: "NCLEX" },
+    { text: "Conduction", tag: "SCFHS" },
+    { text: "Radiation", tag: "STR" }
   ],
   correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Life-threatening cardiac instability must be ruled out first.",
-    howPathophysiology: "Myocardial ischemia reduces oxygen delivery to cardiac tissue.",
-    examPriority: "Assessment before intervention.",
-    trapAnalysis: {
-      SAFE_DELAY: "Medication may mask deterioration.",
-      NCLEX: "Rest does not identify cause.",
-      STR: "Documentation is never first."
+  mechanism: "heatTransfer.conduction"
+},
+{
+  q: "A patient on isolation coughs into the air repeatedly. Nurse technician must:",
+  options: [
+    { text: "Ensure proper mask and hand hygiene", tag: "SCFHS" },
+    { text: "Tell patient it’s not important", tag: "STR" },
+    { text: "Ignore if symptoms mild", tag: "SAFE_DELAY" },
+    { text: "Move patient to hallway", tag: "NCLEX" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "infection.isolation"
+}
+];
+
+// ================================
+// RATIONALE LIBRARY (FIXED)
+// ================================
+const rationaleLibrary = {
+heatTransfer: {
+  conduction: {
+    correct: "Direct contact transfers heat from warm skin to cold water.",
+    distractors: {
+      SAFE_DELAY: "Evaporation requires vaporization.",
+      NCLEX: "Convection involves moving fluids.",
+      STR: "Radiation requires no contact."
     },
-    clinicalPearl: "Chest pain = assess immediately."
+    exam: "Conduction = direct contact",
+    patho: "Thermal gradient causes heat loss",
+    intuitive: "Touch ice → conduction"
+  }
+},
+infection: {
+  isolation: {
+    correct: "Proper PPE prevents transmission.",
+    distractors: {
+      STR: "Ignoring spreads infection.",
+      SAFE_DELAY: "Delay risks exposure.",
+      NCLEX: "Hallway breaks isolation."
+    },
+    exam: "Isolation → PPE",
+    patho: "Droplet spread",
+    intuitive: "Mask + hygiene"
   }
 }
-);
-questions.push(
-{
-  q: "Which nursing intervention is MOST appropriate for a client with dysphagia?",
-  options: [
-    { text: "Provide thickened liquids", tag: "SCFHS" },
-    { text: "Encourage rapid eating", tag: "SAFE_DELAY" },
-    { text: "Position client supine during meals", tag: "NCLEX" },
-    { text: "Limit swallowing attempts", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Thickened liquids reduce aspiration risk.",
-    howPathophysiology: "Slowed bolus flow improves airway protection.",
-    examPriority: "Prevent aspiration pneumonia.",
-    trapAnalysis: {
-      SAFE_DELAY: "Rapid eating increases choking risk.",
-      NCLEX: "Supine position promotes aspiration.",
-      STR: "Avoidance worsens nutrition."
-    },
-    clinicalPearl: "Dysphagia = slow and thick."
-  }
-},
-{
-  q: "Which sign indicates early infection in a surgical wound?",
-  options: [
-    { text: "Localized redness and warmth", tag: "SCFHS" },
-    { text: "Purulent drainage", tag: "SAFE_DELAY" },
-    { text: "Wound dehiscence", tag: "NCLEX" },
-    { text: "Systemic hypotension", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Inflammatory signs appear before drainage.",
-    howPathophysiology: "Vasodilation and leukocyte response cause redness.",
-    examPriority: "Early detection prevents sepsis.",
-    trapAnalysis: {
-      SAFE_DELAY: "Purulence is a late sign.",
-      NCLEX: "Dehiscence is a complication.",
-      STR: "Hypotension suggests septic shock."
-    },
-    clinicalPearl: "Red + warm = early infection."
-  }
-},
-{
-  q: "A client with diabetes is scheduled for surgery. Which action should the nurse take on the morning of surgery?",
-  options: [
-    { text: "Check blood glucose level", tag: "SCFHS" },
-    { text: "Administer full insulin dose", tag: "SAFE_DELAY" },
-    { text: "Provide breakfast", tag: "NCLEX" },
-    { text: "Delay assessment", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Glucose monitoring guides perioperative management.",
-    howPathophysiology: "Stress hormones alter insulin response.",
-    examPriority: "Prevent hypo/hyperglycemia.",
-    trapAnalysis: {
-      SAFE_DELAY: "Insulin dose often adjusted.",
-      NCLEX: "Client is NPO.",
-      STR: "Assessment cannot be delayed."
-    },
-    clinicalPearl: "Surgery + diabetes = check sugar."
-  }
-},
-{
-  q: "Which finding suggests effective oxygenation?",
-  options: [
-    { text: "Oxygen saturation of 96%", tag: "SCFHS" },
-    { text: "Use of accessory muscles", tag: "SAFE_DELAY" },
-    { text: "Restlessness", tag: "NCLEX" },
-    { text: "Cyanotic lips", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Normal SpO₂ reflects adequate oxygen delivery.",
-    howPathophysiology: "Hemoglobin saturation above 95% is sufficient.",
-    examPriority: "Evaluate oxygenation status.",
-    trapAnalysis: {
-      SAFE_DELAY: "Accessory muscle use indicates distress.",
-      NCLEX: "Restlessness suggests hypoxia.",
-      STR: "Cyanosis indicates severe hypoxemia."
-    },
-    clinicalPearl: "Numbers don’t lie: 96% is good."
-  }
-},
-{
-  q: "Which intervention BEST prevents pressure injuries?",
-  options: [
-    { text: "Reposition the client every 2 hours", tag: "SCFHS" },
-    { text: "Massage bony prominences", tag: "SAFE_DELAY" },
-    { text: "Limit mobility", tag: "NCLEX" },
-    { text: "Reduce protein intake", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Pressure relief restores tissue perfusion.",
-    howPathophysiology: "Sustained pressure causes ischemia.",
-    examPriority: "Prevention over treatment.",
-    trapAnalysis: {
-      SAFE_DELAY: "Massage damages capillaries.",
-      NCLEX: "Immobility increases risk.",
-      STR: "Protein supports healing."
-    },
-    clinicalPearl: "Turn to save skin."
-  }
-},
-{
-  q: "A client with suspected stroke arrives within 1 hour of symptom onset. What is the PRIORITY action?",
-  options: [
-    { text: "Assess airway, breathing, and circulation", tag: "SCFHS" },
-    { text: "Obtain full health history", tag: "SAFE_DELAY" },
-    { text: "Administer antihypertensives", tag: "NCLEX" },
-    { text: "Prepare for rehabilitation", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Airway and oxygenation are immediately life-saving.",
-    howPathophysiology: "Cerebral ischemia worsens with hypoxia.",
-    examPriority: "ABCs always first.",
-    trapAnalysis: {
-      SAFE_DELAY: "History can wait.",
-      NCLEX: "BP management follows imaging.",
-      STR: "Rehab is not acute care."
-    },
-    clinicalPearl: "Stroke = ABC before CT."
-  }
-},
-{
-  q: "Which finding is MOST indicative of acute blood loss?",
-  options: [
-    { text: "Tachycardia", tag: "SCFHS" },
-    { text: "Bradycardia", tag: "SAFE_DELAY" },
-    { text: "Hypertension", tag: "NCLEX" },
-    { text: "Bounding pulse", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Heart rate rises to maintain cardiac output.",
-    howPathophysiology: "Sympathetic response compensates for volume loss.",
-    examPriority: "Recognize hemorrhage early.",
-    trapAnalysis: {
-      SAFE_DELAY: "Bradycardia is late sign.",
-      NCLEX: "BP usually drops.",
-      STR: "Bounding pulse suggests overload."
-    },
-    clinicalPearl: "Fast pulse = volume loss."
-  }
-},
-{
-  q: "A client with pneumonia has SpO₂ 88% on room air. What is the FIRST intervention?",
-  options: [
-    { text: "Apply supplemental oxygen", tag: "SCFHS" },
-    { text: "Encourage coughing", tag: "SAFE_DELAY" },
-    { text: "Obtain sputum culture", tag: "NCLEX" },
-    { text: "Administer antibiotics", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Hypoxemia requires immediate correction.",
-    howPathophysiology: "Impaired gas exchange lowers PaO₂.",
-    examPriority: "Correct oxygenation first.",
-    trapAnalysis: {
-      SAFE_DELAY: "Supportive but not first.",
-      NCLEX: "Cultures should not delay oxygen.",
-      STR: "Antibiotics are not immediate priority."
-    },
-    clinicalPearl: "Low SpO₂ = oxygen now."
-  }
-},
-{
-  q: "Which action is MOST appropriate for seizure precautions?",
-  options: [
-    { text: "Pad the side rails", tag: "SCFHS" },
-    { text: "Restrain the client", tag: "SAFE_DELAY" },
-    { text: "Insert oral airway during seizure", tag: "NCLEX" },
-    { text: "Keep bed elevated", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Padding prevents injury.",
-    howPathophysiology: "Uncontrolled muscle activity causes trauma.",
-    examPriority: "Protect patient safety.",
-    trapAnalysis: {
-      SAFE_DELAY: "Restraints increase injury.",
-      NCLEX: "Airways should not be forced.",
-      STR: "Bed should be low."
-    },
-    clinicalPearl: "Seizure = protect, don’t restrain."
-  }
-},
-{
-  q: "A client with heart failure has ankle swelling. Which finding confirms this?",
-  options: [
-    { text: "Pitting edema", tag: "SCFHS" },
-    { text: "Dry skin", tag: "SAFE_DELAY" },
-    { text: "Poor skin turgor", tag: "NCLEX" },
-    { text: "Sunken eyes", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  analysis: {
-    whyCorrect: "Pitting edema indicates fluid accumulation.",
-    howPathophysiology: "Venous congestion increases capillary pressure.",
-    examPriority: "Monitor fluid overload.",
-    trapAnalysis: {
-      SAFE_DELAY: "Dry skin suggests dehydration.",
-      NCLEX: "Poor turgor = deficit.",
-      STR: "Sunken eyes = dehydration."
-    },
-    clinicalPearl: "HF = fluid backs up."
-  }
-}
-);
+};
 
+// ================================
+// ENGINE
+// ================================
+let index = 0;
 
+document.getElementById("startBtn").onclick = () => {
+  document.getElementById("startBtn").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  renderQuestion();
+};
 
-
-/* ===============================
-   CONTINUE QUESTIONS 31–50
-   =============================== */
-// 👉 PASTE QUESTIONS 31–50 HERE ONLY
-
-
-
-/* ===============================
-   CONTINUE QUESTIONS 51–71
-   =============================== */
-// 👉 PASTE QUESTIONS 51–71 HERE ONLY
-
-
-
-/* ===============================
-   CONTINUE QUESTIONS 72–100
-   =============================== */
-// 👉 PASTE QUESTIONS 72–100 HERE ONLY
-
-
-
-/************ ENGINE (DO NOT TOUCH) ************/
 function renderQuestion() {
-  const q = questions[currentIndex];
-  if (!q) return;
+  const q = questions[index];
+  const quiz = document.getElementById("quiz");
+  const review = document.getElementById("review");
+  review.classList.add("hidden");
+  document.getElementById("nextBtn").classList.add("hidden");
 
-  let html = `<div class="question">${currentIndex + 1}. ${q.q}</div>`;
-  q.options.forEach(o => {
-    html += `<div class="option">
-      <input type="radio" name="opt" disabled> ${o.text}
-    </div>`;
+  quiz.innerHTML = `<b>Question ${index+1}:</b><br>${q.q}`;
+
+  q.options.forEach((o,i)=>{
+    const div = document.createElement("div");
+    div.className = "option";
+    div.innerHTML = `${String.fromCharCode(65+i)}. ${o.text} <span class="tag ${o.tag}">${o.tag}</span>`;
+    div.onclick = () => selectAnswer(o.tag);
+    quiz.appendChild(div);
   });
 
-  html += `<div class="analysis">
-    <strong>WHY:</strong> ${q.analysis.whyCorrect}<br>
-    <strong>HOW:</strong> ${q.analysis.howPathophysiology}<br>
-    <strong>EXAM PRIORITY:</strong> ${q.analysis.examPriority}<br>
-    <strong>CLINICAL PEARL:</strong> ${q.analysis.clinicalPearl}
-  </div>`;
-
-  document.getElementById("quiz").innerHTML = html;
+  updateProgress();
 }
 
-function nextQuestion() {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
-    renderQuestion();
+function selectAnswer(tag) {
+  const q = questions[index];
+  const review = document.getElementById("review");
+  review.classList.remove("hidden");
+
+  const [g,k] = q.mechanism.split(".");
+  const mech = rationaleLibrary[g][k];
+
+  document.querySelectorAll(".option").forEach(o=>{
+    o.classList.add(o.innerHTML.includes(q.correctTag) ? "correct" : "incorrect");
+    o.style.pointerEvents = "none";
+  });
+
+  review.innerHTML = `<b>Correct:</b> ${mech.correct}`;
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+function nextQuestion(){
+  index++;
+  if(index >= questions.length){
+    document.getElementById("quiz").innerHTML = "<h3>End of Quiz</h3>";
+    document.getElementById("nextBtn").classList.add("hidden");
+    return;
   }
+  renderQuestion();
 }
 
-renderQuestion();
+function updateProgress(){
+  const percent = Math.round(((index+1)/questions.length)*100);
+  const bar = document.getElementById("progressBar");
+  bar.style.width = percent+"%";
+  bar.innerText = percent+"%";
+}
 </script>
 </body>
 </html>
