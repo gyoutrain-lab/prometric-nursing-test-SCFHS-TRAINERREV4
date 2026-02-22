@@ -161,6 +161,62 @@ const questions = [
     correctTag: "SCFHS",
     mechanism: "infection.isolation"
   }
+  {
+  q: "A patient suddenly becomes dizzy and pale while standing. What is the nurse technician’s first action?",
+  options: [
+    { text: "Assist patient to sit or lie down", tag: "SCFHS" },
+    { text: "Encourage deep breathing", tag: "NCLEX" },
+    { text: "Offer oral fluids immediately", tag: "STR" },
+    { text: "Document the episode", tag: "SAFE_DELAY" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "safety.orthostatic"
+},
+{
+  q: "A patient receiving oxygen via nasal cannula has dry nasal mucosa. What should the nurse technician do?",
+  options: [
+    { text: "Add humidification as ordered", tag: "SCFHS" },
+    { text: "Remove oxygen periodically", tag: "STR" },
+    { text: "Increase oxygen flow rate", tag: "NCLEX" },
+    { text: "Ignore the complaint", tag: "SAFE_DELAY" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "respiration.oxygenDryness"
+},
+{
+  q: "A postoperative patient reports calf pain and warmth. What is the PRIORITY action?",
+  options: [
+    { text: "Report findings to nurse immediately", tag: "SCFHS" },
+    { text: "Massage the calf", tag: "STR" },
+    { text: "Encourage ambulation", tag: "NCLEX" },
+    { text: "Apply heating pad", tag: "SAFE_DELAY" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "circulation.dvt"
+},
+{
+  q: "A patient with diabetes is sweating and shaky. What should the nurse technician suspect?",
+  options: [
+    { text: "Hypoglycemia", tag: "SCFHS" },
+    { text: "Hyperglycemia", tag: "NCLEX" },
+    { text: "Hypertension", tag: "STR" },
+    { text: "Dehydration", tag: "SAFE_DELAY" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "endocrine.hypoglycemia"
+},
+{
+  q: "During bed bath, the nurse technician notices non-blanchable redness on the sacrum. What is the correct action?",
+  options: [
+    { text: "Report to nurse immediately", tag: "SCFHS" },
+    { text: "Massage the area", tag: "STR" },
+    { text: "Apply powder only", tag: "NCLEX" },
+    { text: "Ignore and continue bath", tag: "SAFE_DELAY" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "skin.pressureInjury"
+},
+
   // Add up to 20 or more in same structure
 ];
 
@@ -280,7 +336,73 @@ const rationaleLibrary = {
       patho: "Airborne/ droplet → transmission risk → prevent spread",
       intuitive: "Mask, gloves, hygiene = safety"
     }
+  },
+safety: {
+  orthostatic: {
+    correct: "Sitting or lying the patient down prevents falls and improves cerebral perfusion.",
+    distractors: {
+      NCLEX: "Breathing does not correct sudden blood pressure drop.",
+      STR: "Oral fluids are not first priority during acute dizziness.",
+      SAFE_DELAY: "Documentation delays immediate safety intervention."
+    },
+    exam: "Orthostatic hypotension → dizziness → prevent fall",
+    patho: "Sudden position change → ↓ cerebral perfusion → dizziness",
+    intuitive: "Dizzy patient = sit them down NOW"
   }
+},
+respiration: {
+  oxygenDryness: {
+    correct: "Humidification prevents mucosal dryness and irritation during oxygen therapy.",
+    distractors: {
+      STR: "Removing oxygen compromises oxygenation.",
+      NCLEX: "Increasing flow worsens dryness.",
+      SAFE_DELAY: "Ignoring discomfort causes complications."
+    },
+    exam: "Oxygen therapy → dryness → humidify",
+    patho: "Dry oxygen → mucosal irritation → bleeding risk",
+    intuitive: "Dry nose + oxygen = add humidity"
+  }
+},
+circulation: {
+  dvt: {
+    correct: "Calf pain and warmth indicate possible DVT and must be reported immediately.",
+    distractors: {
+      STR: "Massage may dislodge a clot.",
+      NCLEX: "Ambulation may worsen embolization risk.",
+      SAFE_DELAY: "Heat increases circulation and clot risk."
+    },
+    exam: "DVT signs → report immediately → prevent PE",
+    patho: "Venous stasis → clot formation → embolization risk",
+    intuitive: "Painful warm calf = DO NOT TOUCH → report"
+  }
+},
+endocrine: {
+  hypoglycemia: {
+    correct: "Sweating and shakiness are classic signs of hypoglycemia.",
+    distractors: {
+      NCLEX: "Hyperglycemia presents with thirst and polyuria.",
+      STR: "Hypertension does not cause tremors.",
+      SAFE_DELAY: "Dehydration does not cause sudden sweating."
+    },
+    exam: "Shaky + sweaty → low blood sugar",
+    patho: "Low glucose → sympathetic activation → tremor, diaphoresis",
+    intuitive: "Cold sweat = sugar LOW"
+  }
+},
+skin: {
+  pressureInjury: {
+    correct: "Non-blanchable redness indicates early pressure injury and must be reported.",
+    distractors: {
+      STR: "Massage worsens tissue damage.",
+      NCLEX: "Powder does not treat pressure injury.",
+      SAFE_DELAY: "Ignoring leads to ulcer progression."
+    },
+    exam: "Non-blanchable redness = Stage 1 pressure injury",
+    patho: "Pressure → ischemia → tissue damage",
+    intuitive: "Red that stays red = report fast"
+  }
+},
+
 };
 
 // ================================
