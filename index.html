@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>SCFHS Rationale Quiz Engine</title>
+<title>SCFHS Expert Rationale Engine</title>
 
 <style>
 body {
@@ -18,23 +18,24 @@ body {
   padding: 20px;
   border-radius: 8px;
 }
-h1 { text-align: center; }
-.question { margin-bottom: 20px; }
 .option {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin: 5px 0;
+  margin: 6px 0;
   cursor: pointer;
 }
 .option:hover { background: #eef; }
 .correct { background: #c8f7c5; }
 .incorrect { background: #f7c5c5; }
-.rationale {
-  margin-top: 10px;
-  padding: 10px;
+.analysis {
+  margin-top: 12px;
+  padding: 12px;
   background: #f1f1f1;
   border-left: 4px solid #0077cc;
+}
+button {
+  margin-top: 10px;
 }
 .hidden { display: none; }
 </style>
@@ -42,17 +43,12 @@ h1 { text-align: center; }
 
 <body>
 <div class="container">
-<h1>SCFHS / Prometric Practice Quiz</h1>
-
+<h2>SCFHS / Prometric Expert Quiz</h2>
 <div id="quiz"></div>
 <button onclick="nextQuestion()">Next</button>
 </div>
 
 <script>
-/* ==========================
-   QUESTION BANK (PART 1)
-   ========================== */
-
 const questions = [
 {
   q: "A client reports chest pain radiating to the left arm. What is the nurse’s FIRST action?",
@@ -63,13 +59,16 @@ const questions = [
     { text: "Document the complaint", tag: "STR" }
   ],
   correctTag: "SCFHS",
-  rationale: {
-    correct: "Immediate assessment identifies life-threatening instability.",
-    distractors: {
-      SAFE_DELAY: "Medication follows assessment.",
-      NCLEX: "Rest does not address cause.",
-      STR: "Documentation is not priority."
-    }
+  analysis: {
+    whyCorrect: "Chest pain radiating to the left arm suggests myocardial ischemia. Immediate assessment identifies life-threatening instability before any intervention.",
+    howPathophysiology: "Myocardial ischemia reduces oxygen delivery to cardiac tissue, triggering sympathetic response and potential dysrhythmias.",
+    examPriority: "Assessment always precedes intervention in unstable cardiac presentations.",
+    trapAnalysis: {
+      SAFE_DELAY: "Analgesics may mask symptoms and must follow assessment.",
+      NCLEX: "Rest does not identify instability.",
+      STR: "Documentation never precedes assessment."
+    },
+    clinicalPearl: "Chest pain + radiation = assess first, treat second."
   }
 },
 {
@@ -81,13 +80,16 @@ const questions = [
     { text: "Limit swallowing attempts", tag: "STR" }
   ],
   correctTag: "SCFHS",
-  rationale: {
-    correct: "Thickened liquids reduce aspiration risk.",
-    distractors: {
+  analysis: {
+    whyCorrect: "Thickened liquids move more slowly, improving swallowing control and reducing aspiration risk.",
+    howPathophysiology: "Dysphagia impairs coordination of swallowing muscles, allowing thin liquids to enter the airway.",
+    examPriority: "Airway protection is the priority in swallowing disorders.",
+    trapAnalysis: {
       SAFE_DELAY: "Rapid eating increases choking risk.",
       NCLEX: "Supine position promotes aspiration.",
-      STR: "Avoidance worsens nutrition."
-    }
+      STR: "Limiting intake worsens nutrition."
+    },
+    clinicalPearl: "Dysphagia care = slow, thick, upright."
   }
 },
 {
@@ -99,13 +101,16 @@ const questions = [
     { text: "Systemic hypotension", tag: "STR" }
   ],
   correctTag: "SCFHS",
-  rationale: {
-    correct: "Inflammation is an early sign of infection.",
-    distractors: {
+  analysis: {
+    whyCorrect: "Inflammatory signs appear before drainage or systemic involvement.",
+    howPathophysiology: "Local vasodilation and increased blood flow cause redness and warmth.",
+    examPriority: "Identify infection early before complications occur.",
+    trapAnalysis: {
       SAFE_DELAY: "Purulence is a later sign.",
-      NCLEX: "Dehiscence is a complication.",
+      NCLEX: "Dehiscence is a complication, not infection itself.",
       STR: "Hypotension suggests sepsis."
-    }
+    },
+    clinicalPearl: "Red + warm comes before pus."
   }
 },
 {
@@ -117,13 +122,16 @@ const questions = [
     { text: "Delay assessment", tag: "STR" }
   ],
   correctTag: "SCFHS",
-  rationale: {
-    correct: "Glucose monitoring guides perioperative management.",
-    distractors: {
-      SAFE_DELAY: "Insulin dosing may require adjustment.",
+  analysis: {
+    whyCorrect: "Glucose monitoring guides insulin adjustment and prevents hypo- or hyperglycemia.",
+    howPathophysiology: "Stress response alters insulin sensitivity perioperatively.",
+    examPriority: "Assessment before intervention.",
+    trapAnalysis: {
+      SAFE_DELAY: "Insulin may need dose reduction.",
       NCLEX: "Clients are NPO.",
       STR: "Assessment must not be delayed."
-    }
+    },
+    clinicalPearl: "Surgery + diabetes = check glucose first."
   }
 },
 {
@@ -135,13 +143,16 @@ const questions = [
     { text: "Cyanotic lips", tag: "STR" }
   ],
   correctTag: "SCFHS",
-  rationale: {
-    correct: "Normal saturation indicates adequate oxygen delivery.",
-    distractors: {
-      SAFE_DELAY: "Accessory muscles indicate distress.",
-      NCLEX: "Restlessness suggests hypoxia.",
-      STR: "Cyanosis indicates poor oxygenation."
-    }
+  analysis: {
+    whyCorrect: "Normal oxygen saturation reflects adequate tissue oxygen delivery.",
+    howPathophysiology: "Hemoglobin saturation correlates with arterial oxygen levels.",
+    examPriority: "Objective data > subjective signs.",
+    trapAnalysis: {
+      SAFE_DELAY: "Accessory muscle use indicates distress.",
+      NCLEX: "Restlessness is an early hypoxia sign.",
+      STR: "Cyanosis indicates severe hypoxia."
+    },
+    clinicalPearl: "SpO₂ tells the truth."
   }
 }
 ];
@@ -151,37 +162,35 @@ let index = 0;
 function loadQuestion() {
   const q = questions[index];
   const quiz = document.getElementById("quiz");
-  quiz.innerHTML = "";
-
-  const qDiv = document.createElement("div");
-  qDiv.className = "question";
-  qDiv.innerHTML = `<h3>${index + 1}. ${q.q}</h3>`;
-  quiz.appendChild(qDiv);
+  quiz.innerHTML = `<h3>${index + 1}. ${q.q}</h3>`;
 
   q.options.forEach(opt => {
-    const div = document.createElement("div");
-    div.className = "option";
-    div.innerText = opt.text;
-    div.onclick = () => selectOption(div, opt.tag, q);
-    quiz.appendChild(div);
+    const d = document.createElement("div");
+    d.className = "option";
+    d.innerText = opt.text;
+    d.onclick = () => selectOption(d, opt.tag, q);
+    quiz.appendChild(d);
   });
 }
 
 function selectOption(div, tag, q) {
   document.querySelectorAll(".option").forEach(o => o.onclick = null);
+  div.classList.add(tag === q.correctTag ? "correct" : "incorrect");
 
-  if (tag === q.correctTag) {
-    div.classList.add("correct");
-  } else {
-    div.classList.add("incorrect");
-  }
-
-  const rat = document.createElement("div");
-  rat.className = "rationale";
-  rat.innerHTML = `<b>Correct:</b> ${q.rationale.correct}<br><br>
-    <b>Why others are wrong:</b><br>
-    ${Object.values(q.rationale.distractors).join("<br>")}`;
-  document.getElementById("quiz").appendChild(rat);
+  const a = q.analysis;
+  const box = document.createElement("div");
+  box.className = "analysis";
+  box.innerHTML = `
+    <b>Why Correct:</b> ${a.whyCorrect}<br><br>
+    <b>How (Pathophysiology):</b> ${a.howPathophysiology}<br><br>
+    <b>Exam Priority:</b> ${a.examPriority}<br><br>
+    <b>Trap Analysis:</b><br>
+    SAFE_DELAY: ${a.trapAnalysis.SAFE_DELAY}<br>
+    NCLEX: ${a.trapAnalysis.NCLEX}<br>
+    STR: ${a.trapAnalysis.STR}<br><br>
+    <b>Clinical Pearl:</b> ${a.clinicalPearl}
+  `;
+  document.getElementById("quiz").appendChild(box);
 }
 
 function nextQuestion() {
