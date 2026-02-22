@@ -216,7 +216,61 @@ const questions = [
   correctTag: "SCFHS",
   mechanism: "skin.pressureInjury"
 },
-
+{
+  q: "A patient complains of sudden chest pain and shortness of breath. What should the nurse technician do FIRST?",
+  options: [
+    { text: "Report immediately to the nurse", tag: "SCFHS" },
+    { text: "Place patient in supine position", tag: "NCLEX" },
+    { text: "Give oral fluids", tag: "STR" },
+    { text: "Document and observe", tag: "SAFE_DELAY" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "cardio.emergency"
+},
+{
+  q: "A patient’s oxygen saturation drops to 88% on room air. What is the correct action?",
+  options: [
+    { text: "Apply oxygen as ordered and report", tag: "SCFHS" },
+    { text: "Encourage coughing only", tag: "NCLEX" },
+    { text: "Wait 10 minutes and recheck", tag: "SAFE_DELAY" },
+    { text: "Ignore if patient feels fine", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "respiration.hypoxia"
+},
+{
+  q: "A patient receiving IV fluids complains of swelling at the insertion site. What should the nurse technician do?",
+  options: [
+    { text: "Stop infusion and notify nurse", tag: "SCFHS" },
+    { text: "Increase IV rate", tag: "NCLEX" },
+    { text: "Massage the area", tag: "STR" },
+    { text: "Continue and monitor later", tag: "SAFE_DELAY" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "iv.infiltration"
+},
+{
+  q: "A patient is found on the floor beside the bed. What is the FIRST action?",
+  options: [
+    { text: "Stay with patient and call for help", tag: "SCFHS" },
+    { text: "Lift patient back to bed", tag: "STR" },
+    { text: "Document the incident", tag: "SAFE_DELAY" },
+    { text: "Ask patient what happened", tag: "NCLEX" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "safety.fall"
+},
+{
+  q: "A patient with dementia becomes agitated and attempts to climb out of bed. What should the nurse technician do?",
+  options: [
+    { text: "Stay with patient and notify nurse", tag: "SCFHS" },
+    { text: "Apply restraints immediately", tag: "STR" },
+    { text: "Leave patient to calm down", tag: "SAFE_DELAY" },
+    { text: "Turn off the lights", tag: "NCLEX" }
+  ],
+  correctTag: "SCFHS",
+  mechanism: "safety.agitation"
+}
   // Add up to 20 or more in same structure
 ];
 
@@ -402,7 +456,69 @@ skin: {
     intuitive: "Red that stays red = report fast"
   }
 },
-
+cardio: {
+  emergency: {
+    correct: "Chest pain with shortness of breath is a medical emergency and must be reported immediately.",
+    distractors: {
+      NCLEX: "Positioning does not address the emergency.",
+      STR: "Fluids may worsen condition.",
+      SAFE_DELAY: "Observation delays life-saving care."
+    },
+    exam: "Chest pain + SOB → report immediately",
+    patho: "Cardiac ischemia → decreased oxygen → tissue injury",
+    intuitive: "Chest pain = call nurse NOW"
+  }
+},
+respiration: {
+  hypoxia: {
+    correct: "Oxygen should be applied as ordered and the nurse notified.",
+    distractors: {
+      NCLEX: "Coughing alone does not correct hypoxia.",
+      SAFE_DELAY: "Waiting worsens oxygen deprivation.",
+      STR: "Ignoring hypoxia is unsafe."
+    },
+    exam: "SpO₂ < 90% → oxygen + report",
+    patho: "Low oxygen → cellular hypoxia → organ damage",
+    intuitive: "Low SpO₂ = oxygen first"
+  }
+},
+iv: {
+  infiltration: {
+    correct: "Swelling indicates IV infiltration; stop infusion and notify nurse.",
+    distractors: {
+      NCLEX: "Increasing rate worsens infiltration.",
+      STR: "Massage damages tissue.",
+      SAFE_DELAY: "Delay increases injury."
+    },
+    exam: "IV swelling → stop infusion → report",
+    patho: "Fluid leaks into tissue → edema → pain",
+    intuitive: "Puffy IV = STOP"
+  }
+},
+safety: {
+  fall: {
+    correct: "Patient safety comes first—stay with patient and call for help.",
+    distractors: {
+      STR: "Lifting alone risks injury.",
+      SAFE_DELAY: "Documentation comes later.",
+      NCLEX: "Questioning delays safety assessment."
+    },
+    exam: "Fall → assess → call for help",
+    patho: "Fall → possible injury → need assessment",
+    intuitive: "Fall = don’t leave patient"
+  },
+  agitation: {
+    correct: "Staying with the patient prevents injury and allows escalation.",
+    distractors: {
+      STR: "Restraints require order.",
+      SAFE_DELAY: "Leaving patient risks falls.",
+      NCLEX: "Environmental changes alone are insufficient."
+    },
+    exam: "Agitation → safety → notify nurse",
+    patho: "Cognitive impairment → unsafe behavior",
+    intuitive: "Unsafe patient = stay close"
+  }
+}
 };
 
 // ================================
