@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SCFHS Classroom Rationale Engine - Level 4</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:0; }
+.container { max-width:1000px; margin:auto; background:#fff; padding:25px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+h2 { text-align:center; margin-bottom:20px; }
+.option { margin:10px 0; padding:12px; border:1px solid #ccc; border-radius:6px; cursor:pointer; transition:0.2s; }
+.option:hover { background:#f0f8ff; }
+.correct { background:#d4edda; border-color:#28a745; }
+.incorrect { background:#f8d7da; border-color:#dc3545; }
+button { margin-top:15px; padding:10px 20px; font-size:16px; }
+.hidden { display:none; }
+
+.review { margin-top:20px; padding:15px; background:#f9fafb; border-left:5px solid #007bff; }
+
+.tag { font-size:12px; padding:2px 6px; border-radius:4px; margin-left:6px; }
+.SCFHS { background:#d4edda; }
+.NCLEX { background:#cce5ff; }
+.STR { background:#fff3cd; }
+.SAFE_DELAY { background:#e2e3e5; }
+
+.expand { margin-top:15px; background:#eef5ff; padding:12px; border-radius:6px; }
+.expand pre { background:#fff; padding:10px; border:1px dashed #007bff; white-space:pre-wrap; }
+.header { font-weight:bold; margin-top:10px; }
+
+.progress-container { width:100%; background:#e2e3e5; border-radius:5px; overflow:hidden; margin-bottom:20px; }
+.progress-bar { height:20px; width:0%; background:#007bff; text-align:center; color:#fff; line-height:20px; transition:0.3s; }
+
+.jump-container { margin-bottom:20px; }
+.jump-container input { width:60px; padding:6px; margin-right:10px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>SCFHS Classroom Rationale Engine - Level 4</h2>
+
+<div id="startDiv">
+  <button id="startBtn">Start Quiz</button>
+</div>
+
+<div class="jump-container hidden" id="jumpDiv">
+  Jump to question: 
+  <input type="number" id="jumpInput" min="1">
+  <button onclick="jumpToQuestion()">Go</button>
+</div>
+
+<div class="progress-container">
+  <div class="progress-bar" id="progressBar">0%</div>
+</div>
+
+<div id="quiz" class="hidden"></div>
+<div id="review" class="review hidden"></div>
+<button onclick="nextQuestion()" id="nextBtn" class="hidden">Next Question</button>
+</div>
+
+<script>
+// ================================
+// QUESTION BANK
+// ================================
+const questions = [
+  {
+    q: "When a nurse places a febrile infant into cold water, how is heat primarily lost?",
+    options: [
+      { text: "Evaporation", tag: "SAFE_DELAY" },
+      { text: "Convection", tag: "NCLEX" },
+      { text: "Conduction", tag: "SCFHS" },
+      { text: "Radiation", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    mechanism: "heatTransfer.conduction"
+  },
+  {
+    q: "A 68-year-old postoperative patient becomes restless with BP 84/50, HR 128. What is the priority action?",
+    options: [
+      { text: "Start isotonic IV fluids", tag: "SCFHS" },
+      { text: "Administer IV antibiotics", tag: "NCLEX" },
+      { text: "Give furosemide", tag: "STR" },
+      { text: "Obtain blood cultures", tag: "SAFE_DELAY" }
+    ],
+    correctTag: "SCFHS",
+    mechanism: "shock.hypovolemic"
+  },
+  {
+    q: "A patient with a new urinary catheter reports bright red urine in the drainage bag. What should the nurse technician do first?",
+    options: [
+      { text: "Continue monitoring", tag: "SAFE_DELAY" },
+      { text: "Notify the nurse immediately", tag: "SCFHS" },
+      { text: "Increase fluid intake", tag: "NCLEX" },
+      { text: "Irrigate the catheter yourself", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    mechanism: "urinary.hematuria"
+  },
+  {
+    q: "A patient develops redness, warmth, and swelling at an IV site while receiving antibiotics. The nurse technician should:",
+    options: [
+      { text: "Stop infusion and report to nurse", tag: "SCFHS" },
+      { text: "Increase infusion rate", tag: "NCLEX" },
+      { text: "Apply heat and continue infusion", tag: "STR" },
+      { text: "Document and ignore", tag: "SAFE_DELAY" }
+    ],
+    correctTag: "SCFHS",
+    mechanism: "iv.phlebitis"
+  },
+  {
+    q: "When assisting a fall-risk patient with ambulation, the safest technique is to:",
+    options: [
+      { text: "Use a gait belt and walk slightly behind patient", tag: "SCFHS" },
+      { text: "Hold patient’s forearm only", tag: "NCLEX" },
+      { text: "Allow patient to walk independently", tag: "STR" },
+      { text: "Walk in front while patient holds your shoulder", tag: "SAFE_DELAY" }
+    ],
+    correctTag: "SCFHS",
+    mechanism: "safety.ambulation"
+  },
+  {
+    q: "A confused patient repeatedly removes their oxygen cannula. The safest intervention is:",
+    options: [
+      { text: "Apply soft mitts and continue monitoring", tag: "SCFHS" },
+      { text: "Restrain the patient’s arms immediately", tag: "STR" },
+      { text: "Remove oxygen and let patient rest", tag: "SAFE_DELAY" },
+      { text: "Put patient alone in a quiet room", tag: "NCLEX" }
+    ],
+    correctTag: "SCFHS",
+    mechanism: "safety.oxygen"
+  },
+  {
+    q: "A patient shows Kussmaul respirations. The nurse technician should recognize this as a sign of:",
+    options: [
+      { text: "Metabolic acidosis", tag: "SCFHS" },
+      { text: "Heart failure", tag: "NCLEX" },
+      { text: "Hypovolemia", tag: "STR" },
+      { text: "Respiratory infection", tag: "SAFE_DELAY" }
+    ],
+    correctTag: "SCFHS",
+    mechanism: "respiration.kussmaul"
+  },
+  {
+    q: "A patient with shortness of breath and chest tightness suddenly develops cyanosis. First action:",
+    options: [
+      { text: "Call code blue and provide oxygen", tag: "SCFHS" },
+      { text: "Document the event", tag: "SAFE_DELAY" },
+      { text: "Wait 5 minutes and reassess", tag: "NCLEX" },
+      { text: "Elevate head of bed only", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    mechanism: "respiration.acuteDistress"
+  },
+  {
+    q: "A patient on isolation coughs into the air repeatedly. Nurse technician must:",
+    options: [
+      { text: "Ensure proper mask and hand hygiene", tag: "SCFHS" },
+      { text: "Tell patient it’s not important", tag: "STR" },
+      { text: "Ignore if symptoms mild", tag: "SAFE_DELAY" },
+      { text: "Move patient to hallway", tag: "NCLEX" }
+    ],
+    correctTag: "SCFHS",
+    mechanism: "infection.isolation"
+  }
+  // Add up to 20 or more in same structure
+];
+
+// ================================
+// RATIONALE LIBRARY
+// ================================
+const rationaleLibrary = {
+  heatTransfer: {
+    conduction: {
+      correct: "Direct contact transfers heat from warm skin to cold water.",
+      distractors: {
+        SAFE_DELAY: "Evaporation requires liquid turning to vapor, not immersion.",
+        NCLEX: "Convection involves moving air or fluid, not direct contact.",
+        STR: "Radiation transfers heat without contact."
+      },
+      exam: "Conduction → direct contact\nConvection → moving air/fluid\nRadiation → no contact\nEvaporation → liquid to vapor",
+      patho: "Immersion → thermal gradient → heat flows from skin to water → core temperature decreases",
+      intuitive: "Touch ice = conduction\nCold wind = convection\nSun = radiation\nSweat drying = evaporation"
+    }
+  },
+  shock: {
+    hypovolemic: {
+      correct: "Rapid isotonic fluid administration restores circulating volume and tissue perfusion.",
+      distractors: {
+        NCLEX: "Antibiotics do not correct hypotension immediately.",
+        STR: "Diuretics worsen volume depletion.",
+        SAFE_DELAY: "Diagnostic actions delay life-saving intervention."
+      },
+      exam: "Hypovolemia → ↓ preload → ↓ cardiac output → ↓ MAP → organ hypoperfusion",
+      patho: "Fluid loss → ↓ venous return → ↓ stroke volume → ↓ MAP → organ hypoperfusion",
+      intuitive: "Empty tank = low pressure → organs starve → need fluid replacement"
+    }
+  },
+  urinary: {
+    hematuria: {
+      correct: "Bright red urine may indicate trauma or bleeding; notify the nurse immediately for assessment.",
+      distractors: {
+        SAFE_DELAY: "Continuing to monitor delays potentially critical intervention.",
+        NCLEX: "Increasing fluids alone does not address potential bleeding.",
+        STR: "Catheter irrigation should not be performed without a nurse order."
+      },
+      exam: "Hematuria → assess source → notify nurse → prevent complications",
+      patho: "Trauma/anticoagulation → bleeding into urinary tract → red urine",
+      intuitive: "Red urine = alert nurse → don't ignore"
+    }
+  },
+  iv: {
+    phlebitis: {
+      correct: "Redness, warmth, and swelling indicate IV phlebitis; stop infusion and notify nurse.",
+      distractors: {
+        NCLEX: "Increasing infusion rate worsens irritation.",
+        STR: "Applying heat without stopping infusion is unsafe.",
+        SAFE_DELAY: "Ignoring or documenting delays proper intervention."
+      },
+      exam: "IV phlebitis → stop infusion → notify nurse → prevent complications",
+      patho: "Irritation/infection → endothelial inflammation → redness/swelling",
+      intuitive: "Hot, red IV site = stop and call nurse"
+    }
+  },
+  safety: {
+    ambulation: {
+      correct: "Using a gait belt and positioning yourself slightly behind reduces fall risk safely.",
+      distractors: {
+        NCLEX: "Holding forearm alone is unsafe for high-risk patient.",
+        STR: "Walking independently increases fall risk.",
+        SAFE_DELAY: "Walking in front doesn't provide safe support."
+      },
+      exam: "Fall-risk patient → gait belt → proper positioning → prevent injury",
+      patho: "Unsteady patient → inadequate support → increased fall likelihood",
+      intuitive: "Support belt = safety → be ready behind patient"
+    },
+    oxygen: {
+      correct: "Use least restrictive intervention (soft mitts) and monitor patient.",
+      distractors: {
+        STR: "Physical restraints are last-resort and increase harm risk.",
+        SAFE_DELAY: "Removing oxygen delays care.",
+        NCLEX: "Isolating patient does not ensure safety or oxygenation."
+      },
+      exam: "Confused patient → prevent self-harm → least restrictive → monitor",
+      patho: "Confusion → risk of removing oxygen → hypoxia",
+      intuitive: "Keep oxygen in place safely without harming patient"
+    }
+  },
+  respiration: {
+    kussmaul: {
+      correct: "Kussmaul respirations indicate metabolic acidosis, commonly diabetic ketoacidosis.",
+      distractors: {
+        NCLEX: "Heart failure presents differently.",
+        STR: "Hypovolemia does not typically cause deep, rapid breathing.",
+        SAFE_DELAY: "Respiratory infection may alter pattern but not Kussmaul."
+      },
+      exam: "Deep, rapid breathing → metabolic acidosis → assess cause",
+      patho: "Acidosis → chemoreceptor stimulation → deep, rapid breaths",
+      intuitive: "Fast, deep breaths = body trying to blow off acid"
+    },
+    acuteDistress: {
+      correct: "Call code blue and provide oxygen immediately to prevent hypoxia and cardiac arrest.",
+      distractors: {
+        SAFE_DELAY: "Delaying action puts patient at high risk.",
+        NCLEX: "Waiting and reassessing wastes critical time.",
+        STR: "Elevating head only does not correct hypoxia."
+      },
+      exam: "Acute distress → oxygen → urgent intervention",
+      patho: "Hypoxia → tissue damage → rapid action needed",
+      intuitive: "Blue lips = act fast"
+    }
+  },
+  infection: {
+    isolation: {
+      correct: "Ensure proper mask, gown, and hand hygiene to prevent spread of infection.",
+      distractors: {
+        STR: "Ignoring infection risk spreads disease.",
+        SAFE_DELAY: "Delaying precautions endangers patient and staff.",
+        NCLEX: "Moving patient to hallway violates isolation protocol."
+      },
+      exam: "Isolation → PPE → infection control",
+      patho: "Airborne/ droplet → transmission risk → prevent spread",
+      intuitive: "Mask, gloves, hygiene = safety"
+    }
+  }
+};
+
+// ================================
+// ENGINE STATE
+// ================================
+let index = 0;
+
+// ================================
+// START QUIZ
+// ================================
+document.getElementById("startBtn").addEventListener("click", function(){
+  document.getElementById("startDiv").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  document.getElementById("jumpDiv").classList.remove("hidden");
+  renderQuestion();
+});
+
+// ================================
+// RENDER QUESTION
+// ================================
+function renderQuestion() {
+  const q = questions[index];
+  const quizDiv = document.getElementById("quiz");
+  document.getElementById("review").classList.add("hidden");
+  document.getElementById("nextBtn").classList.add("hidden");
+
+  quizDiv.innerHTML = `<p><b>Question ${index+1}:</b><br>${q.q}</p>`;
+
+  q.options.forEach((o,i)=>{
+    const div = document.createElement("div");
+    div.classList.add("option");
+    div.innerHTML = `${String.fromCharCode(65+i)}. ${o.text} <span class="tag ${o.tag}">${o.tag}</span>`;
+    div.onclick = () => selectAnswer(o.tag, div);
+    quizDiv.appendChild(div);
+  });
+
+  updateProgress();
+}
+
+// ================================
+// HANDLE SELECTION
+// ================================
+function selectAnswer(tag, div) {
+  const q = questions[index];
+  const review = document.getElementById("review");
+  review.classList.remove("hidden");
+
+  const [group,key] = q.mechanism.split(".");
+  const mech = rationaleLibrary[group][key];
+
+  // Disable further clicks
+  document.querySelectorAll(".option").forEach(d=>d.style.pointerEvents="none");
+
+  // Highlight correct/incorrect
+  document.querySelectorAll(".option").forEach(d=>{
+    if(d.innerHTML.includes(q.correctTag)) d.classList.add("correct");
+    else d.classList.add("incorrect");
+  });
+
+  // Build review
+  let html = `<div class="header">✅ Correct Rationale</div>${mech.correct}`;
+  html += `<div class="header">❌ Option Analysis</div>`;
+  q.options.forEach(o=>{
+    if(o.tag===q.correctTag) html += `<div><b>${o.text}</b> (${o.tag}) — Correct</div>`;
+    else html += `<div><b>${o.text}</b> (${o.tag}) — ${mech.distractors[o.tag]}</div>`;
+  });
+
+  html += `<div class="expand">
+    <div class="header">Core Principle (Exam Language)</div><pre>${mech.exam}</pre>
+    <div class="header">Pathophysiologic Chain</div><pre>${mech.patho}</pre>
+    <div class="header">Intuitive Clinical Mapping</div><pre>${mech.intuitive}</pre>
+  </div>`;
+
+  review.innerHTML = html;
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+// ================================
+// NEXT QUESTION
+// ================================
+function nextQuestion() {
+  index++;
+  if(index >= questions.length){
+    document.getElementById("quiz").innerHTML="<h3>End of Review</h3>";
+    document.getElementById("review").classList.add("hidden");
+    document.getElementById("nextBtn").classList.add("hidden");
+    return;
+  }
+  renderQuestion();
+}
+
+// ================================
+// JUMP TO SPECIFIC QUESTION
+// ================================
+function jumpToQuestion() {
+  const input = parseInt(document.getElementById("jumpInput").value);
+  if(isNaN(input) || input<1 || input>questions.length){
+    alert("Invalid question number");
+    return;
+  }
+  index = input-1;
+  renderQuestion();
+}
+
+// ================================
+// PROGRESS BAR
+// ================================
+function updateProgress(){
+  const bar = document.getElementById("progressBar");
+  const percent = Math.round(((index)/questions.length)*100);
+  bar.style.width = percent+"%";
+  bar.innerText = percent+"%";
+}
+</script>
+
+</body>
+</html>
