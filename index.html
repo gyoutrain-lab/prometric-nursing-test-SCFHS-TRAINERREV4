@@ -13,15 +13,22 @@ h2 { text-align:center; margin-bottom:20px; }
 .correct { background:#d4edda; border-color:#28a745; }
 .incorrect { background:#f8d7da; border-color:#dc3545; }
 .hidden { display:none; }
+
 .review { margin-top:20px; padding:15px; background:#f9fafb; border-left:5px solid #007bff; }
+.header { font-weight:bold; margin-top:10px; }
+
 .tag { font-size:12px; padding:2px 6px; border-radius:4px; margin-left:6px; }
 .SCFHS { background:#d4edda; }
 .NCLEX { background:#cce5ff; }
 .STR { background:#fff3cd; }
 .SAFE_DELAY { background:#e2e3e5; }
 
+.expand { margin-top:15px; background:#eef5ff; padding:12px; border-radius:6px; }
+.expand pre { background:#fff; padding:10px; border:1px dashed #007bff; white-space:pre-wrap; }
+
 .progress-container { width:100%; background:#e2e3e5; border-radius:5px; overflow:hidden; margin-bottom:20px; }
 .progress-bar { height:20px; width:0%; background:#007bff; color:#fff; text-align:center; line-height:20px; }
+
 .validator { background:#fff3cd; padding:10px; border-left:5px solid #ffc107; margin-bottom:15px; }
 </style>
 </head>
@@ -44,7 +51,7 @@ h2 { text-align:center; margin-bottom:20px; }
 
 <script>
 // ================================
-// QUESTIONS (SAFE TO EXTEND)
+// QUESTIONS (UNCHANGED CONTENT)
 // ================================
 const questions = [
 {
@@ -72,57 +79,51 @@ const questions = [
 ];
 
 // ================================
-// RATIONALE LIBRARY (MERGED, SAFE)
+// RATIONALE LIBRARY (FULL, MERGED, RESTORED)
 // ================================
 const rationaleLibrary = {
 heatTransfer: {
   conduction: {
     correct: "Direct contact transfers heat from warm skin to cold water.",
     distractors: {
-      SAFE_DELAY: "Evaporation requires vaporization.",
-      NCLEX: "Convection involves moving fluids.",
-      STR: "Radiation transfers heat without contact."
+      SAFE_DELAY: "Evaporation requires liquid turning to vapor, not immersion.",
+      NCLEX: "Convection involves moving air or fluid, not direct contact.",
+      STR: "Radiation transfers heat without physical contact."
     },
-    exam: "Conduction = direct contact",
-    patho: "Thermal gradient → heat loss",
-    intuitive: "Touch ice → conduction"
+    exam: "Conduction → direct contact\nConvection → moving air/fluid\nRadiation → no contact\nEvaporation → liquid to vapor",
+    patho: "Immersion in cold water creates a thermal gradient → heat flows from skin to water → core temperature decreases",
+    intuitive: "Touch ice = conduction\nCold wind = convection\nSun heat = radiation\nSweat drying = evaporation"
   }
 },
 infection: {
   isolation: {
-    correct: "Proper PPE prevents infection transmission.",
+    correct: "Ensuring mask use and hand hygiene prevents transmission of infectious organisms.",
     distractors: {
-      STR: "Ignoring spreads infection.",
-      SAFE_DELAY: "Delaying precautions is unsafe.",
-      NCLEX: "Hallway placement violates isolation."
+      STR: "Ignoring infection control promotes disease spread.",
+      SAFE_DELAY: "Delaying precautions increases transmission risk.",
+      NCLEX: "Moving the patient violates isolation protocols."
     },
-    exam: "Isolation → PPE",
-    patho: "Droplet spread risk",
-    intuitive: "Mask + hygiene = safety"
+    exam: "Isolation → PPE → break transmission chain",
+    patho: "Droplet/airborne pathogens → environmental spread → secondary infections",
+    intuitive: "Coughing patient = protect everyone"
   }
 }
 };
 
 // ================================
-// AUTO VALIDATOR (NEW)
+// VALIDATOR (TECHNICAL ONLY)
 // ================================
 function validateEngine() {
   let errors = [];
-
   questions.forEach((q,i)=>{
-    if(!q.mechanism) {
-      errors.push(`Question ${i+1}: Missing mechanism`);
-      return;
-    }
     const [g,k] = q.mechanism.split(".");
-    if(!rationaleLibrary[g] || !rationaleLibrary[g][k]) {
+    if(!rationaleLibrary[g] || !rationaleLibrary[g][k]){
       errors.push(`Question ${i+1}: Missing rationale → ${q.mechanism}`);
     }
   });
-
-  if(errors.length) {
+  if(errors.length){
     const box = document.getElementById("validator");
-    box.innerHTML = "<b>⚠ Validator Warnings:</b><br>" + errors.join("<br>");
+    box.innerHTML = "<b>⚠ Validator Warnings</b><br>" + errors.join("<br>");
     box.classList.remove("hidden");
     return false;
   }
@@ -141,7 +142,7 @@ document.getElementById("startBtn").onclick = () => {
   renderQuestion();
 };
 
-function renderQuestion() {
+function renderQuestion(){
   const q = questions[index];
   const quiz = document.getElementById("quiz");
   const review = document.getElementById("review");
@@ -155,14 +156,14 @@ function renderQuestion() {
     const div = document.createElement("div");
     div.className = "option";
     div.innerHTML = `${String.fromCharCode(65+i)}. ${o.text} <span class="tag ${o.tag}">${o.tag}</span>`;
-    div.onclick = () => selectAnswer(o.tag);
+    div.onclick = ()=>selectAnswer(o.tag);
     quiz.appendChild(div);
   });
 
   updateProgress();
 }
 
-function selectAnswer(tag) {
+function selectAnswer(tag){
   const q = questions[index];
   const review = document.getElementById("review");
   review.classList.remove("hidden");
@@ -175,11 +176,25 @@ function selectAnswer(tag) {
     o.style.pointerEvents = "none";
   });
 
-  review.innerHTML = `<b>Correct Rationale:</b><br>${mech.correct}`;
+  let html = `<div class="header">✅ Correct Rationale</div>${mech.correct}`;
+  html += `<div class="header">❌ Option Analysis</div>`;
+  q.options.forEach(o=>{
+    html += o.tag === q.correctTag
+      ? `<div><b>${o.text}</b> — Correct</div>`
+      : `<div><b>${o.text}</b> — ${mech.distractors[o.tag]}</div>`;
+  });
+
+  html += `<div class="expand">
+    <div class="header">Exam Language</div><pre>${mech.exam}</pre>
+    <div class="header">Pathophysiology</div><pre>${mech.patho}</pre>
+    <div class="header">Intuitive Mapping</div><pre>${mech.intuitive}</pre>
+  </div>`;
+
+  review.innerHTML = html;
   document.getElementById("nextBtn").classList.remove("hidden");
 }
 
-function nextQuestion() {
+function nextQuestion(){
   index++;
   if(index >= questions.length){
     document.getElementById("quiz").innerHTML = "<h3>End of Review</h3>";
@@ -189,11 +204,11 @@ function nextQuestion() {
   renderQuestion();
 }
 
-function updateProgress() {
+function updateProgress(){
   const percent = Math.round(((index+1)/questions.length)*100);
   const bar = document.getElementById("progressBar");
-  bar.style.width = percent + "%";
-  bar.innerText = percent + "%";
+  bar.style.width = percent+"%";
+  bar.innerText = percent+"%";
 }
 </script>
 </body>
