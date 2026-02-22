@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>SCFHS Expert Rationale Engine</title>
+<title>SCFHS Expert Rationale Engine – Part 3 (Q11–30)</title>
 
 <style>
 body {
@@ -12,38 +12,38 @@ body {
   padding: 20px;
 }
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: auto;
   background: #fff;
-  padding: 20px;
+  padding: 25px;
   border-radius: 8px;
 }
 .option {
-  padding: 8px;
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  margin: 6px 0;
+  border-radius: 5px;
+  margin: 8px 0;
   cursor: pointer;
 }
 .option:hover { background: #eef; }
 .correct { background: #c8f7c5; }
 .incorrect { background: #f7c5c5; }
 .analysis {
-  margin-top: 12px;
-  padding: 12px;
+  margin-top: 14px;
+  padding: 14px;
   background: #f1f1f1;
   border-left: 4px solid #0077cc;
 }
 button {
-  margin-top: 10px;
+  margin-top: 15px;
+  padding: 8px 16px;
 }
-.hidden { display: none; }
 </style>
 </head>
 
 <body>
 <div class="container">
-<h2>SCFHS / Prometric Expert Quiz</h2>
+<h2>SCFHS / Prometric Expert Quiz – Part 3 (Q11–30)</h2>
 <div id="quiz"></div>
 <button onclick="nextQuestion()">Next</button>
 </div>
@@ -51,110 +51,372 @@ button {
 <script>
 const questions = [
 {
-  q: "A client reports chest pain radiating to the left arm. What is the nurse’s FIRST action?",
+  q: "A client becomes suddenly short of breath after surgery. What is the nurse’s FIRST action?",
   options: [
-    { text: "Assess vital signs and oxygen saturation", tag: "SCFHS" },
+    { text: "Assess airway and oxygen saturation", tag: "SCFHS" },
     { text: "Administer prescribed analgesics", tag: "SAFE_DELAY" },
-    { text: "Encourage the client to rest", tag: "NCLEX" },
-    { text: "Document the complaint", tag: "STR" }
+    { text: "Encourage coughing", tag: "NCLEX" },
+    { text: "Document the finding", tag: "STR" }
   ],
   correctTag: "SCFHS",
   analysis: {
-    whyCorrect: "Chest pain radiating to the left arm suggests myocardial ischemia. Immediate assessment identifies life-threatening instability before any intervention.",
-    howPathophysiology: "Myocardial ischemia reduces oxygen delivery to cardiac tissue, triggering sympathetic response and potential dysrhythmias.",
-    examPriority: "Assessment always precedes intervention in unstable cardiac presentations.",
+    whyCorrect: "Acute dyspnea may be life-threatening and requires immediate assessment.",
+    howPathophysiology: "Postoperative complications can impair ventilation and oxygenation.",
+    examPriority: "Assessment of ABCs always comes first.",
     trapAnalysis: {
-      SAFE_DELAY: "Analgesics may mask symptoms and must follow assessment.",
-      NCLEX: "Rest does not identify instability.",
-      STR: "Documentation never precedes assessment."
+      SAFE_DELAY: "Medication may mask symptoms.",
+      NCLEX: "Coughing does not identify instability.",
+      STR: "Documentation is never first."
     },
-    clinicalPearl: "Chest pain + radiation = assess first, treat second."
+    clinicalPearl: "Sudden SOB = assess airway now."
   }
 },
 {
-  q: "Which nursing intervention is MOST appropriate for a client with dysphagia?",
+  q: "Which finding indicates dehydration in an older adult?",
   options: [
-    { text: "Provide thickened liquids", tag: "SCFHS" },
-    { text: "Encourage rapid eating", tag: "SAFE_DELAY" },
-    { text: "Position client supine during meals", tag: "NCLEX" },
-    { text: "Limit swallowing attempts", tag: "STR" }
+    { text: "Poor skin turgor", tag: "SCFHS" },
+    { text: "Bounding pulse", tag: "SAFE_DELAY" },
+    { text: "Crackles in lungs", tag: "NCLEX" },
+    { text: "Peripheral edema", tag: "STR" }
   ],
   correctTag: "SCFHS",
   analysis: {
-    whyCorrect: "Thickened liquids move more slowly, improving swallowing control and reducing aspiration risk.",
-    howPathophysiology: "Dysphagia impairs coordination of swallowing muscles, allowing thin liquids to enter the airway.",
-    examPriority: "Airway protection is the priority in swallowing disorders.",
+    whyCorrect: "Skin elasticity decreases further with fluid deficit.",
+    howPathophysiology: "Reduced interstitial fluid causes delayed skin recoil.",
+    examPriority: "Identify volume deficit early.",
     trapAnalysis: {
-      SAFE_DELAY: "Rapid eating increases choking risk.",
-      NCLEX: "Supine position promotes aspiration.",
-      STR: "Limiting intake worsens nutrition."
+      SAFE_DELAY: "Bounding pulse suggests fluid excess.",
+      NCLEX: "Crackles indicate overload.",
+      STR: "Edema reflects excess fluid."
     },
-    clinicalPearl: "Dysphagia care = slow, thick, upright."
+    clinicalPearl: "Dry + tenting skin = dehydration."
   }
 },
 {
-  q: "Which sign indicates early infection in a surgical wound?",
+  q: "A client receiving opioids is difficult to arouse. What should the nurse do FIRST?",
   options: [
-    { text: "Localized redness and warmth", tag: "SCFHS" },
-    { text: "Purulent drainage", tag: "SAFE_DELAY" },
-    { text: "Wound dehiscence", tag: "NCLEX" },
-    { text: "Systemic hypotension", tag: "STR" }
+    { text: "Assess respiratory rate", tag: "SCFHS" },
+    { text: "Administer naloxone", tag: "SAFE_DELAY" },
+    { text: "Notify the physician", tag: "NCLEX" },
+    { text: "Document sedation level", tag: "STR" }
   ],
   correctTag: "SCFHS",
   analysis: {
-    whyCorrect: "Inflammatory signs appear before drainage or systemic involvement.",
-    howPathophysiology: "Local vasodilation and increased blood flow cause redness and warmth.",
-    examPriority: "Identify infection early before complications occur.",
+    whyCorrect: "Respiratory depression is the most dangerous opioid effect.",
+    howPathophysiology: "Opioids suppress the respiratory center in the brainstem.",
+    examPriority: "Assess before administering reversal agents.",
     trapAnalysis: {
-      SAFE_DELAY: "Purulence is a later sign.",
-      NCLEX: "Dehiscence is a complication, not infection itself.",
-      STR: "Hypotension suggests sepsis."
+      SAFE_DELAY: "Naloxone follows assessment.",
+      NCLEX: "Provider notification is not first.",
+      STR: "Documentation is last."
     },
-    clinicalPearl: "Red + warm comes before pus."
+    clinicalPearl: "Opioids → check breathing first."
   }
 },
 {
-  q: "A client with diabetes is scheduled for surgery. Which action should the nurse take on the morning of surgery?",
+  q: "Which sign suggests hypoglycemia?",
   options: [
-    { text: "Check blood glucose level", tag: "SCFHS" },
-    { text: "Administer full insulin dose", tag: "SAFE_DELAY" },
-    { text: "Provide breakfast", tag: "NCLEX" },
-    { text: "Delay assessment", tag: "STR" }
+    { text: "Diaphoresis and tremors", tag: "SCFHS" },
+    { text: "Polyuria", tag: "SAFE_DELAY" },
+    { text: "Dry skin", tag: "NCLEX" },
+    { text: "Kussmaul respirations", tag: "STR" }
   ],
   correctTag: "SCFHS",
   analysis: {
-    whyCorrect: "Glucose monitoring guides insulin adjustment and prevents hypo- or hyperglycemia.",
-    howPathophysiology: "Stress response alters insulin sensitivity perioperatively.",
-    examPriority: "Assessment before intervention.",
+    whyCorrect: "Low glucose activates the sympathetic nervous system.",
+    howPathophysiology: "Adrenergic response causes sweating and shaking.",
+    examPriority: "Recognize hypoglycemia before loss of consciousness.",
     trapAnalysis: {
-      SAFE_DELAY: "Insulin may need dose reduction.",
-      NCLEX: "Clients are NPO.",
-      STR: "Assessment must not be delayed."
+      SAFE_DELAY: "Polyuria suggests hyperglycemia.",
+      NCLEX: "Dry skin suggests dehydration.",
+      STR: "Kussmaul respirations indicate acidosis."
     },
-    clinicalPearl: "Surgery + diabetes = check glucose first."
+    clinicalPearl: "Cold, shaky, sweaty = sugar LOW."
   }
 },
 {
-  q: "Which finding suggests effective oxygenation?",
+  q: "Which intervention reduces aspiration risk during feeding?",
   options: [
-    { text: "Oxygen saturation of 96%", tag: "SCFHS" },
-    { text: "Use of accessory muscles", tag: "SAFE_DELAY" },
-    { text: "Restlessness", tag: "NCLEX" },
-    { text: "Cyanotic lips", tag: "STR" }
+    { text: "Position client upright", tag: "SCFHS" },
+    { text: "Encourage rapid intake", tag: "SAFE_DELAY" },
+    { text: "Provide thin liquids", tag: "NCLEX" },
+    { text: "Feed while supine", tag: "STR" }
   ],
   correctTag: "SCFHS",
   analysis: {
-    whyCorrect: "Normal oxygen saturation reflects adequate tissue oxygen delivery.",
-    howPathophysiology: "Hemoglobin saturation correlates with arterial oxygen levels.",
-    examPriority: "Objective data > subjective signs.",
+    whyCorrect: "Upright positioning uses gravity to protect the airway.",
+    howPathophysiology: "Supine positioning increases aspiration risk.",
+    examPriority: "Airway protection is priority.",
     trapAnalysis: {
-      SAFE_DELAY: "Accessory muscle use indicates distress.",
-      NCLEX: "Restlessness is an early hypoxia sign.",
-      STR: "Cyanosis indicates severe hypoxia."
+      SAFE_DELAY: "Rapid intake increases choking risk.",
+      NCLEX: "Thin liquids are harder to control.",
+      STR: "Supine feeding is unsafe."
     },
-    clinicalPearl: "SpO₂ tells the truth."
+    clinicalPearl: "Feed sitting up."
+  }
+},
+
+<!-- CONTINUE QUESTIONS 18–30 -->
+<script>
+questions.push(
+{
+  q: "A postoperative client suddenly reports chest pain and dyspnea. What is the nurse’s PRIORITY action?",
+  options: [
+    { text: "Assess oxygen saturation and vital signs", tag: "SCFHS" },
+    { text: "Administer prescribed analgesics", tag: "SAFE_DELAY" },
+    { text: "Encourage deep breathing", tag: "NCLEX" },
+    { text: "Reposition the client", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Chest pain with dyspnea may indicate pulmonary embolism or myocardial ischemia.",
+    howPathophysiology: "A sudden blockage impairs oxygenation and cardiac output.",
+    examPriority: "Assessment of life-threatening conditions comes before intervention.",
+    trapAnalysis: {
+      SAFE_DELAY: "Pain control may delay recognition of a fatal condition.",
+      NCLEX: "Breathing exercises do not address acute instability.",
+      STR: "Positioning does not identify cause."
+    },
+    clinicalPearl: "Chest pain + SOB = assess NOW."
+  }
+},
+{
+  q: "Which finding best indicates effective pain management?",
+  options: [
+    { text: "Patient reports tolerable pain level", tag: "SCFHS" },
+    { text: "Vital signs are within normal limits", tag: "SAFE_DELAY" },
+    { text: "Patient is sleeping", tag: "NCLEX" },
+    { text: "No request for analgesics", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Pain is subjective and best evaluated by the patient.",
+    howPathophysiology: "Pain perception varies regardless of objective signs.",
+    examPriority: "Patient-reported outcomes guide care.",
+    trapAnalysis: {
+      SAFE_DELAY: "Vitals may remain normal despite pain.",
+      NCLEX: "Sleep does not guarantee pain relief.",
+      STR: "Patients may avoid asking despite pain."
+    },
+    clinicalPearl: "Pain is what the patient says it is."
+  }
+},
+{
+  q: "A client with heart failure gains 2 kg in 48 hours. What does this indicate?",
+  options: [
+    { text: "Fluid retention", tag: "SCFHS" },
+    { text: "Improved nutrition", tag: "SAFE_DELAY" },
+    { text: "Muscle mass increase", tag: "NCLEX" },
+    { text: "Measurement error", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Rapid weight gain reflects fluid accumulation.",
+    howPathophysiology: "Reduced cardiac output activates fluid-retaining mechanisms.",
+    examPriority: "Early detection prevents decompensation.",
+    trapAnalysis: {
+      SAFE_DELAY: "Nutrition does not cause rapid gain.",
+      NCLEX: "Muscle gain requires weeks.",
+      STR: "Repeated trend confirms accuracy."
+    },
+    clinicalPearl: "2 kg in 2 days = fluid overload."
+  }
+},
+{
+  q: "Which action is MOST effective in preventing pressure injuries?",
+  options: [
+    { text: "Reposition patient every 2 hours", tag: "SCFHS" },
+    { text: "Apply talcum powder", tag: "SAFE_DELAY" },
+    { text: "Massage bony prominences", tag: "NCLEX" },
+    { text: "Limit mobility", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Frequent repositioning restores tissue perfusion.",
+    howPathophysiology: "Prolonged pressure causes ischemia and tissue necrosis.",
+    examPriority: "Prevention is more effective than treatment.",
+    trapAnalysis: {
+      SAFE_DELAY: "Powders do not relieve pressure.",
+      NCLEX: "Massage damages fragile tissue.",
+      STR: "Immobility increases risk."
+    },
+    clinicalPearl: "Pressure off = tissue lives."
+  }
+},
+{
+  q: "Which finding suggests hypoxia?",
+  options: [
+    { text: "Restlessness and confusion", tag: "SCFHS" },
+    { text: "Bradycardia", tag: "SAFE_DELAY" },
+    { text: "Warm flushed skin", tag: "NCLEX" },
+    { text: "Decreased respiratory rate", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "The brain is highly sensitive to low oxygen levels.",
+    howPathophysiology: "Hypoxia causes cerebral dysfunction first.",
+    examPriority: "Neurologic changes signal early hypoxia.",
+    trapAnalysis: {
+      SAFE_DELAY: "Bradycardia is a late sign.",
+      NCLEX: "Flushed skin suggests vasodilation.",
+      STR: "RR often increases initially."
+    },
+    clinicalPearl: "Confused = check oxygen."
+  }
+},
+{
+  q: "A patient receiving IV fluids develops crackles in the lungs. What should the nurse do FIRST?",
+  options: [
+    { text: "Slow or stop the infusion", tag: "SCFHS" },
+    { text: "Document the finding", tag: "SAFE_DELAY" },
+    { text: "Encourage coughing", tag: "NCLEX" },
+    { text: "Reassure the patient", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Crackles indicate fluid overload.",
+    howPathophysiology: "Excess fluid leaks into alveoli.",
+    examPriority: "Prevent respiratory compromise.",
+    trapAnalysis: {
+      SAFE_DELAY: "Documentation follows intervention.",
+      NCLEX: "Coughing does not remove fluid.",
+      STR: "Reassurance delays action."
+    },
+    clinicalPearl: "Crackles + IV fluids = slow it."
+  }
+},
+{
+  q: "Which assessment best evaluates peripheral circulation?",
+  options: [
+    { text: "Capillary refill time", tag: "SCFHS" },
+    { text: "Pupil reaction", tag: "SAFE_DELAY" },
+    { text: "Bowel sounds", tag: "NCLEX" },
+    { text: "Apical pulse", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Capillary refill reflects peripheral perfusion.",
+    howPathophysiology: "Reduced blood flow delays refill.",
+    examPriority: "Early detection of circulatory compromise.",
+    trapAnalysis: {
+      SAFE_DELAY: "Pupils reflect neurologic status.",
+      NCLEX: "Bowel sounds assess GI function.",
+      STR: "Apical pulse assesses cardiac rate."
+    },
+    clinicalPearl: "Slow refill = poor perfusion."
+  }
+},
+{
+  q: "Which intervention reduces the risk of catheter-associated urinary tract infection?",
+  options: [
+    { text: "Remove catheter as soon as possible", tag: "SCFHS" },
+    { text: "Increase catheter size", tag: "SAFE_DELAY" },
+    { text: "Disconnect system for drainage", tag: "NCLEX" },
+    { text: "Irrigate catheter daily", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Duration of catheterization is the biggest risk factor.",
+    howPathophysiology: "Bacteria ascend along the catheter.",
+    examPriority: "Prevention over treatment.",
+    trapAnalysis: {
+      SAFE_DELAY: "Larger catheters increase trauma.",
+      NCLEX: "Breaking the system increases infection.",
+      STR: "Routine irrigation is not recommended."
+    },
+    clinicalPearl: "No catheter = no CAUTI."
+  }
+},
+{
+  q: "Which sign indicates worsening intracranial pressure?",
+  options: [
+    { text: "Decreasing level of consciousness", tag: "SCFHS" },
+    { text: "Increased urine output", tag: "SAFE_DELAY" },
+    { text: "Tachycardia", tag: "NCLEX" },
+    { text: "Warm skin", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "LOC is the most sensitive indicator of neurologic change.",
+    howPathophysiology: "Rising ICP reduces cerebral perfusion.",
+    examPriority: "Early recognition prevents herniation.",
+    trapAnalysis: {
+      SAFE_DELAY: "Urine output is not ICP-specific.",
+      NCLEX: "Heart rate varies.",
+      STR: "Skin temperature unrelated."
+    },
+    clinicalPearl: "LOC drop = ICP up."
+  }
+},
+{
+  q: "Which nursing action best prevents medication errors?",
+  options: [
+    { text: "Follow the five rights of medication administration", tag: "SCFHS" },
+    { text: "Rely on memory", tag: "SAFE_DELAY" },
+    { text: "Prepare meds for multiple patients", tag: "NCLEX" },
+    { text: "Administer meds quickly", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "The five rights ensure safe medication practice.",
+    howPathophysiology: "Errors can cause serious adverse reactions.",
+    examPriority: "Patient safety is paramount.",
+    trapAnalysis: {
+      SAFE_DELAY: "Memory is unreliable.",
+      NCLEX: "Batch preparation increases error risk.",
+      STR: "Speed increases mistakes."
+    },
+    clinicalPearl: "Five rights save lives."
   }
 }
+);
+</script>
+
+{
+  q: "A client reports calf pain after prolonged bed rest. What is the priority action?",
+  options: [
+    { text: "Notify the nurse immediately", tag: "SCFHS" },
+    { text: "Massage the calf", tag: "SAFE_DELAY" },
+    { text: "Encourage walking", tag: "NCLEX" },
+    { text: "Apply heat", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Calf pain may indicate deep vein thrombosis.",
+    howPathophysiology: "Venous stasis promotes clot formation.",
+    examPriority: "Prevent embolization.",
+    trapAnalysis: {
+      SAFE_DELAY: "Massage may dislodge clot.",
+      NCLEX: "Ambulation may worsen condition.",
+      STR: "Heat increases clot risk."
+    },
+    clinicalPearl: "Suspected DVT = hands off."
+  }
+},
+
+{
+  q: "Which action best prevents falls in hospitalized patients?",
+  options: [
+    { text: "Keep bed in lowest position", tag: "SCFHS" },
+    { text: "Raise all side rails", tag: "SAFE_DELAY" },
+    { text: "Encourage independent ambulation", tag: "NCLEX" },
+    { text: "Dim hallway lights", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  analysis: {
+    whyCorrect: "Low bed position reduces injury risk.",
+    howPathophysiology: "Falls cause trauma due to sudden impact.",
+    examPriority: "Environmental safety first.",
+    trapAnalysis: {
+      SAFE_DELAY: "Side rails may increase fall risk.",
+      NCLEX: "Unassisted ambulation is unsafe.",
+      STR: "Poor lighting increases falls."
+    },
+    clinicalPearl: "Low bed = safer fall."
+  }
+}
+
+/* (Remaining questions 18–30 follow SAME structure when we continue) */
 ];
 
 let index = 0;
@@ -162,7 +424,7 @@ let index = 0;
 function loadQuestion() {
   const q = questions[index];
   const quiz = document.getElementById("quiz");
-  quiz.innerHTML = `<h3>${index + 1}. ${q.q}</h3>`;
+  quiz.innerHTML = `<h3>${index + 11}. ${q.q}</h3>`;
 
   q.options.forEach(opt => {
     const d = document.createElement("div");
@@ -198,7 +460,7 @@ function nextQuestion() {
     index++;
     loadQuestion();
   } else {
-    alert("End of Part 1");
+    alert("End of Part 3");
   }
 }
 
