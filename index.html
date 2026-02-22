@@ -1,215 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>SCFHS Classroom Rationale Engine - Level 4</title>
+<meta charset="UTF-8" />
+<title>SCFHS Rationale Quiz Engine</title>
 
 <style>
-body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:0; }
-.container { max-width:1000px; margin:auto; background:#fff; padding:25px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
-h2 { text-align:center; margin-bottom:20px; }
-.option { margin:10px 0; padding:12px; border:1px solid #ccc; border-radius:6px; cursor:pointer; }
-.option:hover { background:#f0f8ff; }
-.correct { background:#d4edda; border-color:#28a745; }
-.incorrect { background:#f8d7da; border-color:#dc3545; }
-.hidden { display:none; }
-
-.review { margin-top:20px; padding:15px; background:#f9fafb; border-left:5px solid #007bff; }
-.header { font-weight:bold; margin-top:10px; }
-
-.tag { font-size:12px; padding:2px 6px; border-radius:4px; margin-left:6px; }
-.SCFHS { background:#d4edda; }
-.NCLEX { background:#cce5ff; }
-.STR { background:#fff3cd; }
-.SAFE_DELAY { background:#e2e3e5; }
-
-.expand { margin-top:15px; background:#eef5ff; padding:12px; border-radius:6px; }
-.expand pre { background:#fff; padding:10px; border:1px dashed #007bff; white-space:pre-wrap; }
-
-.progress-container { width:100%; background:#e2e3e5; border-radius:5px; overflow:hidden; margin-bottom:20px; }
-.progress-bar { height:20px; width:0%; background:#007bff; color:#fff; text-align:center; line-height:20px; }
-
-.validator { background:#fff3cd; padding:10px; border-left:5px solid #ffc107; margin-bottom:15px; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  padding: 20px;
+}
+.container {
+  max-width: 900px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+h1 { text-align: center; }
+.question { margin-bottom: 20px; }
+.option {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 5px 0;
+  cursor: pointer;
+}
+.option:hover { background: #eef; }
+.correct { background: #c8f7c5; }
+.incorrect { background: #f7c5c5; }
+.rationale {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f1f1f1;
+  border-left: 4px solid #0077cc;
+}
+.hidden { display: none; }
 </style>
 </head>
 
 <body>
 <div class="container">
-<h2>SCFHS Classroom Rationale Engine - Level 4</h2>
+<h1>SCFHS / Prometric Practice Quiz</h1>
 
-<div id="validator" class="validator hidden"></div>
-
-<button id="startBtn">Start Quiz</button>
-<div id="quiz" class="hidden"></div>
-<div id="review" class="review hidden"></div>
-<button id="nextBtn" class="hidden" onclick="nextQuestion()">Next Question</button>
-
-<div class="progress-container">
-  <div class="progress-bar" id="progressBar">0%</div>
-</div>
+<div id="quiz"></div>
+<button onclick="nextQuestion()">Next</button>
 </div>
 
 <script>
-// ================================
-// QUESTIONS (UNCHANGED CONTENT)
-// ================================
+/* ==========================
+   QUESTION BANK (PART 1)
+   ========================== */
+
 const questions = [
 {
-  q: "When a nurse places a febrile infant into cold water, how is heat primarily lost?",
+  q: "A client reports chest pain radiating to the left arm. What is the nurse’s FIRST action?",
   options: [
-    { text: "Evaporation", tag: "SAFE_DELAY" },
-    { text: "Convection", tag: "NCLEX" },
-    { text: "Conduction", tag: "SCFHS" },
-    { text: "Radiation", tag: "STR" }
+    { text: "Assess vital signs and oxygen saturation", tag: "SCFHS" },
+    { text: "Administer prescribed analgesics", tag: "SAFE_DELAY" },
+    { text: "Encourage the client to rest", tag: "NCLEX" },
+    { text: "Document the complaint", tag: "STR" }
   ],
   correctTag: "SCFHS",
-  mechanism: "heatTransfer.conduction"
+  rationale: {
+    correct: "Immediate assessment identifies life-threatening instability.",
+    distractors: {
+      SAFE_DELAY: "Medication follows assessment.",
+      NCLEX: "Rest does not address cause.",
+      STR: "Documentation is not priority."
+    }
+  }
 },
 {
-  q: "A patient on isolation coughs into the air repeatedly. Nurse technician must:",
+  q: "Which nursing intervention is MOST appropriate for a client with dysphagia?",
   options: [
-    { text: "Ensure proper mask and hand hygiene", tag: "SCFHS" },
-    { text: "Tell patient it’s not important", tag: "STR" },
-    { text: "Ignore if symptoms mild", tag: "SAFE_DELAY" },
-    { text: "Move patient to hallway", tag: "NCLEX" }
+    { text: "Provide thickened liquids", tag: "SCFHS" },
+    { text: "Encourage rapid eating", tag: "SAFE_DELAY" },
+    { text: "Position client supine during meals", tag: "NCLEX" },
+    { text: "Limit swallowing attempts", tag: "STR" }
   ],
   correctTag: "SCFHS",
-  mechanism: "infection.isolation"
-}
-];
-
-// ================================
-// RATIONALE LIBRARY (FULL, MERGED, RESTORED)
-// ================================
-const rationaleLibrary = {
-heatTransfer: {
-  conduction: {
-    correct: "Direct contact transfers heat from warm skin to cold water.",
+  rationale: {
+    correct: "Thickened liquids reduce aspiration risk.",
     distractors: {
-      SAFE_DELAY: "Evaporation requires liquid turning to vapor, not immersion.",
-      NCLEX: "Convection involves moving air or fluid, not direct contact.",
-      STR: "Radiation transfers heat without physical contact."
-    },
-    exam: "Conduction → direct contact\nConvection → moving air/fluid\nRadiation → no contact\nEvaporation → liquid to vapor",
-    patho: "Immersion in cold water creates a thermal gradient → heat flows from skin to water → core temperature decreases",
-    intuitive: "Touch ice = conduction\nCold wind = convection\nSun heat = radiation\nSweat drying = evaporation"
+      SAFE_DELAY: "Rapid eating increases choking risk.",
+      NCLEX: "Supine position promotes aspiration.",
+      STR: "Avoidance worsens nutrition."
+    }
   }
 },
-infection: {
-  isolation: {
-    correct: "Ensuring mask use and hand hygiene prevents transmission of infectious organisms.",
+{
+  q: "Which sign indicates early infection in a surgical wound?",
+  options: [
+    { text: "Localized redness and warmth", tag: "SCFHS" },
+    { text: "Purulent drainage", tag: "SAFE_DELAY" },
+    { text: "Wound dehiscence", tag: "NCLEX" },
+    { text: "Systemic hypotension", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Inflammation is an early sign of infection.",
     distractors: {
-      STR: "Ignoring infection control promotes disease spread.",
-      SAFE_DELAY: "Delaying precautions increases transmission risk.",
-      NCLEX: "Moving the patient violates isolation protocols."
-    },
-    exam: "Isolation → PPE → break transmission chain",
-    patho: "Droplet/airborne pathogens → environmental spread → secondary infections",
-    intuitive: "Coughing patient = protect everyone"
-  }
-}
-};
-
-// ================================
-// VALIDATOR (TECHNICAL ONLY)
-// ================================
-function validateEngine() {
-  let errors = [];
-  questions.forEach((q,i)=>{
-    const [g,k] = q.mechanism.split(".");
-    if(!rationaleLibrary[g] || !rationaleLibrary[g][k]){
-      errors.push(`Question ${i+1}: Missing rationale → ${q.mechanism}`);
+      SAFE_DELAY: "Purulence is a later sign.",
+      NCLEX: "Dehiscence is a complication.",
+      STR: "Hypotension suggests sepsis."
     }
-  });
-  if(errors.length){
-    const box = document.getElementById("validator");
-    box.innerHTML = "<b>⚠ Validator Warnings</b><br>" + errors.join("<br>");
-    box.classList.remove("hidden");
-    return false;
   }
-  return true;
-}
+},
+{
+  q: "A client with diabetes is scheduled for surgery. Which action should the nurse take on the morning of surgery?",
+  options: [
+    { text: "Check blood glucose level", tag: "SCFHS" },
+    { text: "Administer full insulin dose", tag: "SAFE_DELAY" },
+    { text: "Provide breakfast", tag: "NCLEX" },
+    { text: "Delay assessment", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Glucose monitoring guides perioperative management.",
+    distractors: {
+      SAFE_DELAY: "Insulin dosing may require adjustment.",
+      NCLEX: "Clients are NPO.",
+      STR: "Assessment must not be delayed."
+    }
+  }
+},
+{
+  q: "Which finding suggests effective oxygenation?",
+  options: [
+    { text: "Oxygen saturation of 96%", tag: "SCFHS" },
+    { text: "Use of accessory muscles", tag: "SAFE_DELAY" },
+    { text: "Restlessness", tag: "NCLEX" },
+    { text: "Cyanotic lips", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Normal saturation indicates adequate oxygen delivery.",
+    distractors: {
+      SAFE_DELAY: "Accessory muscles indicate distress.",
+      NCLEX: "Restlessness suggests hypoxia.",
+      STR: "Cyanosis indicates poor oxygenation."
+    }
+  }
+},
+<script>
+/* ==========================
+   QUESTION BANK (PART 2)
+   ========================== */
 
-// ================================
-// ENGINE
-// ================================
+questions.push(
+{
+  q: "Which intervention BEST prevents pressure injuries?",
+  options: [
+    { text: "Reposition the client every 2 hours", tag: "SCFHS" },
+    { text: "Massage bony prominences", tag: "SAFE_DELAY" },
+    { text: "Limit mobility", tag: "NCLEX" },
+    { text: "Reduce protein intake", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Regular repositioning relieves pressure and restores tissue perfusion.",
+    distractors: {
+      SAFE_DELAY: "Massage over bony areas can damage fragile tissue.",
+      NCLEX: "Immobility increases pressure injury risk.",
+      STR: "Protein is needed for skin integrity."
+    }
+  }
+},
+{
+  q: "A client with suspected stroke arrives at the emergency department within 1 hour of symptom onset. What is the nurse’s PRIORITY action?",
+  options: [
+    { text: "Assess airway, breathing, and circulation", tag: "SCFHS" },
+    { text: "Obtain a complete health history", tag: "SAFE_DELAY" },
+    { text: "Administer prescribed antihypertensives", tag: "NCLEX" },
+    { text: "Prepare the client for rehabilitation", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Airway and oxygenation take priority during acute neurologic compromise.",
+    distractors: {
+      SAFE_DELAY: "History collection must not delay stabilization.",
+      NCLEX: "Blood pressure is managed after imaging and assessment.",
+      STR: "Rehabilitation is not an immediate concern."
+    }
+  }
+},
+{
+  q: "Which finding is MOST indicative of acute blood loss?",
+  options: [
+    { text: "Tachycardia", tag: "SCFHS" },
+    { text: "Bradycardia", tag: "SAFE_DELAY" },
+    { text: "Hypertension", tag: "NCLEX" },
+    { text: "Bounding pulse", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Heart rate increases to compensate for reduced circulating volume.",
+    distractors: {
+      SAFE_DELAY: "Bradycardia is inconsistent with hypovolemia.",
+      NCLEX: "Blood pressure typically decreases.",
+      STR: "Bounding pulses suggest fluid excess."
+    }
+  }
+},
+{
+  q: "A client with pneumonia has an oxygen saturation of 88% on room air. What is the nurse’s FIRST intervention?",
+  options: [
+    { text: "Apply supplemental oxygen", tag: "SCFHS" },
+    { text: "Encourage coughing and deep breathing", tag: "SAFE_DELAY" },
+    { text: "Obtain a sputum culture", tag: "NCLEX" },
+    { text: "Administer prescribed antibiotics", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Hypoxemia requires immediate oxygen therapy to prevent tissue hypoxia.",
+    distractors: {
+      SAFE_DELAY: "Breathing exercises support recovery but are not first.",
+      NCLEX: "Cultures must not delay oxygenation.",
+      STR: "Antibiotics are essential but not the immediate priority."
+    }
+  }
+},
+{
+  q: "Which nursing action is MOST appropriate when caring for a client with seizure precautions?",
+  options: [
+    { text: "Pad the side rails", tag: "SCFHS" },
+    { text: "Restrain the client during seizures", tag: "SAFE_DELAY" },
+    { text: "Insert an oral airway during seizure activity", tag: "NCLEX" },
+    { text: "Keep the bed in high position", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Padding side rails reduces risk of injury during seizures.",
+    distractors: {
+      SAFE_DELAY: "Restraints increase trauma risk.",
+      NCLEX: "Oral airways should never be forced.",
+      STR: "Bed should be kept in the lowest position."
+    }
+  }
+}
+);
+</script>
+];
+
 let index = 0;
 
-document.getElementById("startBtn").onclick = () => {
-  if(!validateEngine()) return;
-  document.getElementById("startBtn").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
-  renderQuestion();
-};
-
-function renderQuestion(){
+function loadQuestion() {
   const q = questions[index];
   const quiz = document.getElementById("quiz");
-  const review = document.getElementById("review");
+  quiz.innerHTML = "";
 
-  review.classList.add("hidden");
-  document.getElementById("nextBtn").classList.add("hidden");
+  const qDiv = document.createElement("div");
+  qDiv.className = "question";
+  qDiv.innerHTML = `<h3>${index + 1}. ${q.q}</h3>`;
+  quiz.appendChild(qDiv);
 
-  quiz.innerHTML = `<b>Question ${index+1}:</b><br>${q.q}`;
-
-  q.options.forEach((o,i)=>{
+  q.options.forEach(opt => {
     const div = document.createElement("div");
     div.className = "option";
-    div.innerHTML = `${String.fromCharCode(65+i)}. ${o.text} <span class="tag ${o.tag}">${o.tag}</span>`;
-    div.onclick = ()=>selectAnswer(o.tag);
+    div.innerText = opt.text;
+    div.onclick = () => selectOption(div, opt.tag, q);
     quiz.appendChild(div);
   });
-
-  updateProgress();
 }
 
-function selectAnswer(tag){
-  const q = questions[index];
-  const review = document.getElementById("review");
-  review.classList.remove("hidden");
+function selectOption(div, tag, q) {
+  document.querySelectorAll(".option").forEach(o => o.onclick = null);
 
-  const [g,k] = q.mechanism.split(".");
-  const mech = rationaleLibrary[g][k];
-
-  document.querySelectorAll(".option").forEach(o=>{
-    o.classList.add(o.innerHTML.includes(q.correctTag) ? "correct" : "incorrect");
-    o.style.pointerEvents = "none";
-  });
-
-  let html = `<div class="header">✅ Correct Rationale</div>${mech.correct}`;
-  html += `<div class="header">❌ Option Analysis</div>`;
-  q.options.forEach(o=>{
-    html += o.tag === q.correctTag
-      ? `<div><b>${o.text}</b> — Correct</div>`
-      : `<div><b>${o.text}</b> — ${mech.distractors[o.tag]}</div>`;
-  });
-
-  html += `<div class="expand">
-    <div class="header">Exam Language</div><pre>${mech.exam}</pre>
-    <div class="header">Pathophysiology</div><pre>${mech.patho}</pre>
-    <div class="header">Intuitive Mapping</div><pre>${mech.intuitive}</pre>
-  </div>`;
-
-  review.innerHTML = html;
-  document.getElementById("nextBtn").classList.remove("hidden");
-}
-
-function nextQuestion(){
-  index++;
-  if(index >= questions.length){
-    document.getElementById("quiz").innerHTML = "<h3>End of Review</h3>";
-    document.getElementById("nextBtn").classList.add("hidden");
-    return;
+  if (tag === q.correctTag) {
+    div.classList.add("correct");
+  } else {
+    div.classList.add("incorrect");
   }
-  renderQuestion();
+
+  const rat = document.createElement("div");
+  rat.className = "rationale";
+  rat.innerHTML = `<b>Correct:</b> ${q.rationale.correct}<br><br>
+    <b>Why others are wrong:</b><br>
+    ${Object.values(q.rationale.distractors).join("<br>")}`;
+  document.getElementById("quiz").appendChild(rat);
 }
 
-function updateProgress(){
-  const percent = Math.round(((index+1)/questions.length)*100);
-  const bar = document.getElementById("progressBar");
-  bar.style.width = percent+"%";
-  bar.innerText = percent+"%";
+function nextQuestion() {
+  if (index < questions.length - 1) {
+    index++;
+    loadQuestion();
+  } else {
+    alert("End of Part 1");
+  }
 }
+
+loadQuestion();
 </script>
 </body>
 </html>
