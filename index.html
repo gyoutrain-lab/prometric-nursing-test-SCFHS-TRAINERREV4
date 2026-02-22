@@ -2,48 +2,77 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SCFHS Classroom Rationale Engine - Level 4</title>
+<title>SCFHS Nurse Technician – Level 4</title>
+
 <style>
-body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:0; }
-.container { max-width:1000px; margin:auto; background:#fff; padding:25px; border-radius:8px; box-shadow:0 0px 10px rgba(0,0,0,0.1); }
-h2 { text-align:center; margin-bottom:20px; }
-.option { margin:10px 0; padding:12px; border:1px solid #ccc; border-radius:6px; cursor:pointer; }
-.option:hover { background:#f0f8ff; }
-.correct { background:#d4edda; border-color:#28a745; }
-.incorrect { background:#f8d7da; border-color:#dc3545; }
-.hidden { display:none; }
-.review { margin-top:20px; padding:15px; background:#f9fafb; border-left:5px solid #007bff; }
-.tag { font-size:12px; padding:2px 6px; border-radius:4px; margin-left:6px; }
-.SCFHS { background:#d4edda; }
-.NCLEX { background:#cce5ff; }
-.STR { background:#fff3cd; }
-.SAFE_DELAY { background:#e2e3e5; }
-.progress-container { width:100%; background:#e2e3e5; border-radius:5px; overflow:hidden; margin-bottom:20px; }
-.progress-bar { height:20px; width:0%; background:#007bff; color:#fff; text-align:center; line-height:20px; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+.container {
+  max-width: 900px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+}
+.question {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.options label {
+  display: block;
+  margin: 6px 0;
+}
+.rationale {
+  margin-top: 15px;
+  background: #eef3ff;
+  padding: 10px;
+  display: none;
+}
+.small {
+  color: #888;
+  font-size: 12px;
+}
 </style>
 </head>
 
 <body>
 <div class="container">
-<h2>SCFHS Classroom Rationale Engine - Level 4</h2>
-
-<button id="startBtn">Start Quiz</button>
-<div id="quiz" class="hidden"></div>
-<div id="review" class="review hidden"></div>
-<button onclick="nextQuestion()" id="nextBtn" class="hidden">Next Question</button>
-
-<div class="progress-container">
-  <div class="progress-bar" id="progressBar">0%</div>
-</div>
+  <div id="quiz"></div>
+  <button onclick="checkAnswer()">Submit</button>
+  <div id="rationale" class="rationale"></div>
 </div>
 
 <script>
-// ================================
-// QUESTIONS
-// ================================
 const questions = [
+
+/* =====================================================
+   BATCH 1 : QUESTIONS 1–20 (FOUNDATION / CORE SAFETY)
+   ===================================================== */
+
 {
-  q: "When a nurse places a febrile infant into cold water, how is heat primarily lost?",
+  batch: "1–20",
+  q: "When the nurse put the baby with high temperature in to cold water the baby will lose temperature through?",
+  options: [
+    { text: "Evaporation", tag: "NCLEX" },
+    { text: "Convection", tag: "SCFHS" },
+    { text: "Conduction", tag: "SAFE_DELAY" },
+    { text: "Radiation", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Heat loss occurs by convection when the body is exposed to moving cooler fluid such as water.",
+    distractors: {
+      NCLEX: "Evaporation requires liquid to gas conversion such as sweating.",
+      SAFE_DELAY: "Conduction requires direct contact with a solid surface.",
+      STR: "Radiation involves transfer of heat without contact."
+    }
+  }
+},
+
+{
+  batch: "1–20",
+  q: "When a nurse places a febrile infant into cold water as an emergency intervention, through which mechanism will the infant primarily lose body heat?",
   options: [
     { text: "Evaporation", tag: "SAFE_DELAY" },
     { text: "Convection", tag: "NCLEX" },
@@ -51,117 +80,296 @@ const questions = [
     { text: "Radiation", tag: "STR" }
   ],
   correctTag: "SCFHS",
-  mechanism: "heatTransfer.conduction"
+  rationale: {
+    correct: "Direct contact between the infant’s body and cold water causes heat loss through conduction.",
+    distractors: {
+      SAFE_DELAY: "Evaporation involves vaporization of liquid, not immersion.",
+      NCLEX: "Convection involves fluid movement, not direct contact.",
+      STR: "Radiation involves heat transfer without contact."
+    }
+  }
 },
 {
-  q: "A patient on isolation coughs into the air repeatedly. Nurse technician must:",
+  batch: "1–20",
+  q: "When the nurse technician notices redness and swelling at a peripheral IV site, what is the FIRST action?",
   options: [
-    { text: "Ensure proper mask and hand hygiene", tag: "SCFHS" },
-    { text: "Tell patient it’s not important", tag: "STR" },
-    { text: "Ignore if symptoms mild", tag: "SAFE_DELAY" },
-    { text: "Move patient to hallway", tag: "NCLEX" }
+    { text: "Stop the infusion and notify the nurse", tag: "SCFHS" },
+    { text: "Slow the infusion rate", tag: "NCLEX" },
+    { text: "Apply warm compress and continue", tag: "STR" },
+    { text: "Document the finding only", tag: "SAFE_DELAY" }
   ],
   correctTag: "SCFHS",
-  mechanism: "infection.isolation"
-}
-];
-
-// ================================
-// RATIONALE LIBRARY (FIXED)
-// ================================
-const rationaleLibrary = {
-heatTransfer: {
-  conduction: {
-    correct: "Direct contact transfers heat from warm skin to cold water.",
+  rationale: {
+    correct: "Redness and swelling indicate possible phlebitis or infiltration; stopping the infusion and reporting prevents tissue injury.",
     distractors: {
-      SAFE_DELAY: "Evaporation requires vaporization.",
-      NCLEX: "Convection involves moving fluids.",
-      STR: "Radiation requires no contact."
-    },
-    exam: "Conduction = direct contact",
-    patho: "Thermal gradient causes heat loss",
-    intuitive: "Touch ice → conduction"
+      NCLEX: "Slowing the infusion does not prevent further tissue damage.",
+      STR: "Continuing the infusion worsens inflammation.",
+      SAFE_DELAY: "Documentation alone delays necessary intervention."
+    }
   }
 },
-infection: {
-  isolation: {
-    correct: "Proper PPE prevents transmission.",
-    distractors: {
-      STR: "Ignoring spreads infection.",
-      SAFE_DELAY: "Delay risks exposure.",
-      NCLEX: "Hallway breaks isolation."
-    },
-    exam: "Isolation → PPE",
-    patho: "Droplet spread",
-    intuitive: "Mask + hygiene"
-  }
-}
-};
 
-// ================================
-// ENGINE
-// ================================
+{
+  batch: "1–20",
+  q: "A patient suddenly complains of dizziness while ambulating. What should the nurse technician do FIRST?",
+  options: [
+    { text: "Assist the patient to sit or lie down", tag: "SCFHS" },
+    { text: "Check blood pressure immediately", tag: "NCLEX" },
+    { text: "Call the physician", tag: "STR" },
+    { text: "Continue ambulation slowly", tag: "SAFE_DELAY" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Preventing a fall is the priority; assisting the patient to sit or lie down ensures immediate safety.",
+    distractors: {
+      NCLEX: "Vital signs are important but safety comes first.",
+      STR: "Calling the physician is not the immediate priority.",
+      SAFE_DELAY: "Continuing ambulation increases fall risk."
+    }
+  }
+},
+
+{
+  batch: "1–20",
+  q: "Which task is appropriate for a nurse technician to perform?",
+  options: [
+    { text: "Measuring and recording vital signs", tag: "SCFHS" },
+    { text: "Adjusting IV medication dosage", tag: "STR" },
+    { text: "Interpreting ECG rhythm", tag: "NCLEX" },
+    { text: "Administering IV push medication", tag: "SAFE_DELAY" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Measuring and documenting vital signs falls within the nurse technician’s scope of practice.",
+    distractors: {
+      STR: "Medication adjustment requires licensed nurse authority.",
+      NCLEX: "ECG interpretation is outside technician scope.",
+      SAFE_DELAY: "IV push medications require licensed personnel."
+    }
+  }
+},
+
+{
+  batch: "1–20",
+  q: "A patient is found on the floor beside the bed. What should the nurse technician do FIRST?",
+  options: [
+    { text: "Call for help and stay with the patient", tag: "SCFHS" },
+    { text: "Assist the patient back to bed", tag: "STR" },
+    { text: "Complete an incident report", tag: "SAFE_DELAY" },
+    { text: "Check vital signs and leave", tag: "NCLEX" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Ensuring patient safety and calling for assistance is the immediate priority after a fall.",
+    distractors: {
+      STR: "Moving the patient may worsen injuries.",
+      SAFE_DELAY: "Documentation comes after safety assessment.",
+      NCLEX: "Leaving the patient alone is unsafe."
+    }
+  }
+},
+
+{
+  batch: "1–20",
+  q: "A patient’s oxygen saturation drops to 88%. What should the nurse technician do FIRST?",
+  options: [
+    { text: "Notify the nurse immediately", tag: "SCFHS" },
+    { text: "Increase oxygen flow rate independently", tag: "STR" },
+    { text: "Recheck saturation in 10 minutes", tag: "SAFE_DELAY" },
+    { text: "Remove oxygen to rest the patient", tag: "NCLEX" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "A saturation of 88% indicates hypoxia; the nurse must be notified promptly for intervention.",
+    distractors: {
+      STR: "Changing oxygen settings may be outside technician authority.",
+      SAFE_DELAY: "Waiting risks worsening hypoxia.",
+      NCLEX: "Removing oxygen is unsafe."
+    }
+  }
+},
+
+{
+  batch: "1–20",
+  q: "Which observation requires IMMEDIATE reporting to the nurse?",
+  options: [
+    { text: "Sudden chest pain", tag: "SCFHS" },
+    { text: "Mild headache", tag: "SAFE_DELAY" },
+    { text: "Decreased appetite", tag: "NCLEX" },
+    { text: "Difficulty sleeping", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Sudden chest pain may indicate a life-threatening cardiac event and requires immediate escalation.",
+    distractors: {
+      SAFE_DELAY: "Mild headache is usually non-urgent.",
+      NCLEX: "Appetite changes are not immediately life-threatening.",
+      STR: "Sleep difficulty is not an emergency."
+    }
+  }
+},
+
+{
+  batch: "1–20",
+  q: "When assisting with feeding, which patient is at highest risk for aspiration?",
+  options: [
+    { text: "Patient with impaired swallowing", tag: "SCFHS" },
+    { text: "Patient with hypertension", tag: "NCLEX" },
+    { text: "Patient with constipation", tag: "STR" },
+    { text: "Patient with urinary retention", tag: "SAFE_DELAY" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Impaired swallowing increases risk of food entering the airway.",
+    distractors: {
+      NCLEX: "Hypertension does not affect swallowing.",
+      STR: "Constipation does not increase aspiration risk.",
+      SAFE_DELAY: "Urinary retention is unrelated."
+    }
+  }
+},
+
+{
+  batch: "1–20",
+  q: "Which action best prevents pressure injuries?",
+  options: [
+    { text: "Repositioning the patient every 2 hours", tag: "SCFHS" },
+    { text: "Massaging bony prominences", tag: "STR" },
+    { text: "Keeping patient in one position", tag: "SAFE_DELAY" },
+    { text: "Using heat pads on pressure areas", tag: "NCLEX" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Regular repositioning reduces prolonged pressure and tissue ischemia.",
+    distractors: {
+      STR: "Massaging bony areas may cause tissue damage.",
+      SAFE_DELAY: "Immobility increases pressure injury risk.",
+      NCLEX: "Heat can worsen tissue damage."
+    }
+  }
+},
+
+{
+  batch: "1–20",
+  q: "A confused patient keeps pulling at IV tubing. What is the SAFEST initial action?",
+  options: [
+    { text: "Notify the nurse and provide close observation", tag: "SCFHS" },
+    { text: "Apply physical restraints immediately", tag: "STR" },
+    { text: "Ignore the behavior", tag: "SAFE_DELAY" },
+    { text: "Remove the IV line", tag: "NCLEX" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Least-restrictive safety measures and nurse notification are required first.",
+    distractors: {
+      STR: "Restraints are last-resort interventions.",
+      SAFE_DELAY: "Ignoring behavior risks harm.",
+      NCLEX: "Removing IV requires nurse decision."
+    }
+  }
+},
+
+{
+  batch: "1–20",
+  q: "Before assisting a patient to stand, what should the nurse technician assess FIRST?",
+  options: [
+    { text: "Level of dizziness or weakness", tag: "SCFHS" },
+    { text: "Patient’s appetite", tag: "SAFE_DELAY" },
+    { text: "Time of last medication", tag: "NCLEX" },
+    { text: "Room temperature", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Assessing dizziness or weakness helps prevent falls during standing.",
+    distractors: {
+      SAFE_DELAY: "Appetite does not affect immediate safety.",
+      NCLEX: "Medication timing is secondary.",
+      STR: "Room temperature is not relevant."
+    }
+  }
+},
+/* === CONTINUE YOUR ORIGINAL ITEMS UNCHANGED === */
+
+
+/* =====================================================
+   BATCH 2 : QUESTIONS 21–40 (PRIORITY / TRIAGE)
+   ===================================================== */
+
+/*
+PASTE YOUR ORIGINAL QUESTIONS HERE
+ONLY add → batch: "21–40"
+*/
+
+
+/* =====================================================
+   BATCH 3 : QUESTIONS 41–60 (HARD / TRAP-HEAVY)
+   ===================================================== */
+
+/*
+PASTE HERE → batch: "41–60"
+*/
+
+
+/* =====================================================
+   BATCH 4 : QUESTIONS 61–75 (CRITICAL CARE / ICU)
+   ===================================================== */
+
+/*
+PASTE HERE → batch: "61–75"
+*/
+
+
+/* =====================================================
+   BATCH 5 : QUESTIONS 76–100 (DISASTER / FAIL-SAFE)
+   ===================================================== */
+
+/*
+PASTE HERE → batch: "76–100"
+*/
+
+];
+
 let index = 0;
 
-document.getElementById("startBtn").onclick = () => {
-  document.getElementById("startBtn").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
-  renderQuestion();
-};
-
-function renderQuestion() {
+function renderQuestion(){
   const q = questions[index];
-  const quiz = document.getElementById("quiz");
-  const review = document.getElementById("review");
-  review.classList.add("hidden");
-  document.getElementById("nextBtn").classList.add("hidden");
-
-  quiz.innerHTML = `<b>Question ${index+1}:</b><br>${q.q}`;
+  let html = `<div class="question">${index+1}. ${q.q}</div>`;
+  html += `<div class="small">Batch ${q.batch}</div><div class="options">`;
 
   q.options.forEach((o,i)=>{
-    const div = document.createElement("div");
-    div.className = "option";
-    div.innerHTML = `${String.fromCharCode(65+i)}. ${o.text} <span class="tag ${o.tag}">${o.tag}</span>`;
-    div.onclick = () => selectAnswer(o.tag);
-    quiz.appendChild(div);
+    html += `<label>
+      <input type="radio" name="opt" value="${o.tag}"> ${o.text}
+    </label>`;
   });
 
-  updateProgress();
+  html += `</div>`;
+  document.getElementById("quiz").innerHTML = html;
+  document.getElementById("rationale").style.display = "none";
 }
 
-function selectAnswer(tag) {
+function checkAnswer(){
+  const selected = document.querySelector('input[name="opt"]:checked');
+  if(!selected) return alert("Select an answer");
+
   const q = questions[index];
-  const review = document.getElementById("review");
-  review.classList.remove("hidden");
+  let text = "";
 
-  const [g,k] = q.mechanism.split(".");
-  const mech = rationaleLibrary[g][k];
-
-  document.querySelectorAll(".option").forEach(o=>{
-    o.classList.add(o.innerHTML.includes(q.correctTag) ? "correct" : "incorrect");
-    o.style.pointerEvents = "none";
-  });
-
-  review.innerHTML = `<b>Correct:</b> ${mech.correct}`;
-  document.getElementById("nextBtn").classList.remove("hidden");
-}
-
-function nextQuestion(){
-  index++;
-  if(index >= questions.length){
-    document.getElementById("quiz").innerHTML = "<h3>End of Quiz</h3>";
-    document.getElementById("nextBtn").classList.add("hidden");
-    return;
+  if(selected.value === q.correctTag){
+    text = `<b>Correct:</b> ${q.rationale.correct}`;
+  } else {
+    text = `<b>Incorrect:</b> ${q.rationale.distractors[selected.value]}`;
   }
-  renderQuestion();
+
+  document.getElementById("rationale").innerHTML = text;
+  document.getElementById("rationale").style.display = "block";
+
+  index++;
+  if(index < questions.length){
+    setTimeout(renderQuestion, 1200);
+  }
 }
 
-function updateProgress(){
-  const percent = Math.round(((index+1)/questions.length)*100);
-  const bar = document.getElementById("progressBar");
-  bar.style.width = percent+"%";
-  bar.innerText = percent+"%";
-}
+renderQuestion();
 </script>
 </body>
 </html>
