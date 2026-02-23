@@ -1,199 +1,72 @@
-{
-  batch: "1–20",
-  q: "When the nurse technician notices redness and swelling at a peripheral IV site, what is the FIRST action?",
-  options: [
-    { text: "Stop the infusion and notify the nurse", tag: "SCFHS" },
-    { text: "Slow the infusion rate", tag: "NCLEX" },
-    { text: "Apply warm compress and continue", tag: "STR" },
-    { text: "Document the finding only", tag: "SAFE_DELAY" }
-  ],
-  correctTag: "SCFHS",
-  rationale: {
-    correct: "Redness and swelling indicate possible phlebitis or infiltration; stopping the infusion and reporting prevents tissue injury.",
-    distractors: {
-      NCLEX: "Slowing the infusion does not prevent further tissue damage.",
-      STR: "Continuing the infusion worsens inflammation.",
-      SAFE_DELAY: "Documentation alone delays necessary intervention."
-    }
-  }
-},
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SCFHS Pathophysiologic Review Engine</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f4f6f8; padding: 20px; }
+  .question { margin-bottom: 20px; }
+  .options button { display: block; margin: 5px 0; padding: 10px 15px; font-size: 16px; cursor: pointer; }
+  .correct { background-color: #4CAF50; color: white; }
+  .incorrect { background-color: #f44336; color: white; }
+  .rationale { margin-top: 15px; padding: 10px; background: #e8f0fe; border-left: 4px solid #1a73e8; display: none; }
+  #navigation { margin-top: 20px; }
+</style>
+</head>
+<body>
 
-{
-  batch: "1–20",
-  q: "A patient suddenly complains of dizziness while ambulating. What should the nurse technician do FIRST?",
-  options: [
-    { text: "Assist the patient to sit or lie down", tag: "SCFHS" },
-    { text: "Check blood pressure immediately", tag: "NCLEX" },
-    { text: "Call the physician", tag: "STR" },
-    { text: "Continue ambulation slowly", tag: "SAFE_DELAY" }
-  ],
-  correctTag: "SCFHS",
-  rationale: {
-    correct: "Preventing a fall is the priority; assisting the patient to sit or lie down ensures immediate safety.",
-    distractors: {
-      NCLEX: "Vital signs are important but safety comes first.",
-      STR: "Calling the physician is not the immediate priority.",
-      SAFE_DELAY: "Continuing ambulation increases fall risk."
-    }
-  }
-},
+<h2>SCFHS Pathophysiologic Review Engine</h2>
 
-{
-  batch: "1–20",
-  q: "Which task is appropriate for a nurse technician to perform?",
-  options: [
-    { text: "Measuring and recording vital signs", tag: "SCFHS" },
-    { text: "Adjusting IV medication dosage", tag: "STR" },
-    { text: "Interpreting ECG rhythm", tag: "NCLEX" },
-    { text: "Administering IV push medication", tag: "SAFE_DELAY" }
-  ],
-  correctTag: "SCFHS",
-  rationale: {
-    correct: "Measuring and documenting vital signs falls within the nurse technician’s scope of practice.",
-    distractors: {
-      STR: "Medication adjustment requires licensed nurse authority.",
-      NCLEX: "ECG interpretation is outside technician scope.",
-      SAFE_DELAY: "IV push medications require licensed personnel."
-    }
-  }
-},
+<div id="quiz">
+  <div class="question">
+    <p><b>Question 3:</b> A postoperative client suddenly becomes restless, hypotensive, and tachycardic. The surgical drain output has increased significantly. What is the nurse’s <b>PRIORITY</b> action?</p>
+    <div class="options">
+      <button onclick="checkAnswer(this, true)">A. Assess the surgical site and notify the surgeon immediately (SCFHS)</button>
+      <button onclick="checkAnswer(this, false)">B. Administer prescribed analgesics (SAFE_DELAY)</button>
+      <button onclick="checkAnswer(this, false)">C. Reassure the client and continue monitoring (NCLEX)</button>
+      <button onclick="checkAnswer(this, false)">D. Document findings in the medical record (STR)</button>
+    </div>
+    <div class="rationale" id="rationale">
+      <b>Correct Mechanism:</b> Signs indicate possible hemorrhage requiring immediate assessment and notification.<br><br>
+      <b>Option Review:</b><br>
+      A — ✅ Correct: Immediate assessment & notifying the surgeon addresses hemodynamic instability.<br>
+      B — ❌ Pain control does not address urgent instability.<br>
+      C — ❌ Reassurance delays critical intervention.<br>
+      D — ❌ Documentation alone is unsafe without action.
+    </div>
+  </div>
 
-{
-  batch: "1–20",
-  q: "A patient is found on the floor beside the bed. What should the nurse technician do FIRST?",
-  options: [
-    { text: "Call for help and stay with the patient", tag: "SCFHS" },
-    { text: "Assist the patient back to bed", tag: "STR" },
-    { text: "Complete an incident report", tag: "SAFE_DELAY" },
-    { text: "Check vital signs and leave", tag: "NCLEX" }
-  ],
-  correctTag: "SCFHS",
-  rationale: {
-    correct: "Ensuring patient safety and calling for assistance is the immediate priority after a fall.",
-    distractors: {
-      STR: "Moving the patient may worsen injuries.",
-      SAFE_DELAY: "Documentation comes after safety assessment.",
-      NCLEX: "Leaving the patient alone is unsafe."
-    }
-  }
-},
+  <div id="navigation">
+    <button onclick="nextQuestion()">Next</button>
+  </div>
+</div>
 
-{
-  batch: "1–20",
-  q: "A patient’s oxygen saturation drops to 88%. What should the nurse technician do FIRST?",
-  options: [
-    { text: "Notify the nurse immediately", tag: "SCFHS" },
-    { text: "Increase oxygen flow rate independently", tag: "STR" },
-    { text: "Recheck saturation in 10 minutes", tag: "SAFE_DELAY" },
-    { text: "Remove oxygen to rest the patient", tag: "NCLEX" }
-  ],
-  correctTag: "SCFHS",
-  rationale: {
-    correct: "A saturation of 88% indicates hypoxia; the nurse must be notified promptly for intervention.",
-    distractors: {
-      STR: "Changing oxygen settings may be outside technician authority.",
-      SAFE_DELAY: "Waiting risks worsening hypoxia.",
-      NCLEX: "Removing oxygen is unsafe."
-    }
-  }
-},
+<script>
+function checkAnswer(button, isCorrect) {
+  // Disable all buttons after selection
+  const buttons = button.parentElement.querySelectorAll('button');
+  buttons.forEach(b => b.disabled = true);
 
-{
-  batch: "1–20",
-  q: "Which observation requires IMMEDIATE reporting to the nurse?",
-  options: [
-    { text: "Sudden chest pain", tag: "SCFHS" },
-    { text: "Mild headache", tag: "SAFE_DELAY" },
-    { text: "Decreased appetite", tag: "NCLEX" },
-    { text: "Difficulty sleeping", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  rationale: {
-    correct: "Sudden chest pain may indicate a life-threatening cardiac event and requires immediate escalation.",
-    distractors: {
-      SAFE_DELAY: "Mild headache is usually non-urgent.",
-      NCLEX: "Appetite changes are not immediately life-threatening.",
-      STR: "Sleep difficulty is not an emergency."
-    }
+  // Highlight correct/incorrect
+  if (isCorrect) {
+    button.classList.add('correct');
+  } else {
+    button.classList.add('incorrect');
+    // Optionally highlight the correct answer
+    buttons.forEach(b => {
+      if (b.textContent.startsWith("A.")) b.classList.add('correct');
+    });
   }
-},
 
-{
-  batch: "1–20",
-  q: "When assisting with feeding, which patient is at highest risk for aspiration?",
-  options: [
-    { text: "Patient with impaired swallowing", tag: "SCFHS" },
-    { text: "Patient with hypertension", tag: "NCLEX" },
-    { text: "Patient with constipation", tag: "STR" },
-    { text: "Patient with urinary retention", tag: "SAFE_DELAY" }
-  ],
-  correctTag: "SCFHS",
-  rationale: {
-    correct: "Impaired swallowing increases risk of food entering the airway.",
-    distractors: {
-      NCLEX: "Hypertension does not affect swallowing.",
-      STR: "Constipation does not increase aspiration risk.",
-      SAFE_DELAY: "Urinary retention is unrelated."
-    }
-  }
-},
-
-{
-  batch: "1–20",
-  q: "Which action best prevents pressure injuries?",
-  options: [
-    { text: "Repositioning the patient every 2 hours", tag: "SCFHS" },
-    { text: "Massaging bony prominences", tag: "STR" },
-    { text: "Keeping patient in one position", tag: "SAFE_DELAY" },
-    { text: "Using heat pads on pressure areas", tag: "NCLEX" }
-  ],
-  correctTag: "SCFHS",
-  rationale: {
-    correct: "Regular repositioning reduces prolonged pressure and tissue ischemia.",
-    distractors: {
-      STR: "Massaging bony areas may cause tissue damage.",
-      SAFE_DELAY: "Immobility increases pressure injury risk.",
-      NCLEX: "Heat can worsen tissue damage."
-    }
-  }
-},
-
-{
-  batch: "1–20",
-  q: "A confused patient keeps pulling at IV tubing. What is the SAFEST initial action?",
-  options: [
-    { text: "Notify the nurse and provide close observation", tag: "SCFHS" },
-    { text: "Apply physical restraints immediately", tag: "STR" },
-    { text: "Ignore the behavior", tag: "SAFE_DELAY" },
-    { text: "Remove the IV line", tag: "NCLEX" }
-  ],
-  correctTag: "SCFHS",
-  rationale: {
-    correct: "Least-restrictive safety measures and nurse notification are required first.",
-    distractors: {
-      STR: "Restraints are last-resort interventions.",
-      SAFE_DELAY: "Ignoring behavior risks harm.",
-      NCLEX: "Removing IV requires nurse decision."
-    }
-  }
-},
-
-{
-  batch: "1–20",
-  q: "Before assisting a patient to stand, what should the nurse technician assess FIRST?",
-  options: [
-    { text: "Level of dizziness or weakness", tag: "SCFHS" },
-    { text: "Patient’s appetite", tag: "SAFE_DELAY" },
-    { text: "Time of last medication", tag: "NCLEX" },
-    { text: "Room temperature", tag: "STR" }
-  ],
-  correctTag: "SCFHS",
-  rationale: {
-    correct: "Assessing dizziness or weakness helps prevent falls during standing.",
-    distractors: {
-      SAFE_DELAY: "Appetite does not affect immediate safety.",
-      NCLEX: "Medication timing is secondary.",
-      STR: "Room temperature is not relevant."
-    }
-  }
+  // Show rationale
+  document.getElementById('rationale').style.display = 'block';
 }
+
+function nextQuestion() {
+  alert("Move to next question functionality goes here.");
+  // You can add logic to load the next question dynamically
+}
+</script>
+
+</body>
+</html>
