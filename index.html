@@ -2,71 +2,325 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SCFHS Pathophysiologic Review Engine</title>
+<title>SCFHS Prometric Exam</title>
 <style>
-  body { font-family: Arial, sans-serif; background: #f4f6f8; padding: 20px; }
-  .question { margin-bottom: 20px; }
-  .options button { display: block; margin: 5px 0; padding: 10px 15px; font-size: 16px; cursor: pointer; }
-  .correct { background-color: #4CAF50; color: white; }
-  .incorrect { background-color: #f44336; color: white; }
-  .rationale { margin-top: 15px; padding: 10px; background: #e8f0fe; border-left: 4px solid #1a73e8; display: none; }
-  #navigation { margin-top: 20px; }
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+}
+#examScreen {
+    display: none;
+}
+.question {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.options button {
+    display: block;
+    margin: 5px 0;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #e9ecef;
+}
+.options button:hover {
+    background: #d1d8e0;
+}
+.correct {
+    background: #c8e6c9;
+}
+.incorrect {
+    background: #ffcdd2;
+}
 </style>
 </head>
 <body>
 
-<h2>SCFHS Pathophysiologic Review Engine</h2>
+<div id="startScreen">
+    <h2>SCFHS Prometric Exam</h2>
+    <input type="text" id="studentName" placeholder="Enter Name"><br><br>
+    <input type="text" id="studentID" placeholder="Enter ID"><br><br>
+    <button onclick="startExam()">Start Exam</button>
+</div>
 
-<div id="quiz">
-  <div class="question">
-    <p><b>Question 3:</b> A postoperative client suddenly becomes restless, hypotensive, and tachycardic. The surgical drain output has increased significantly. What is the nurse’s <b>PRIORITY</b> action?</p>
-    <div class="options">
-      <button onclick="checkAnswer(this, true)">A. Assess the surgical site and notify the surgeon immediately (SCFHS)</button>
-      <button onclick="checkAnswer(this, false)">B. Administer prescribed analgesics (SAFE_DELAY)</button>
-      <button onclick="checkAnswer(this, false)">C. Reassure the client and continue monitoring (NCLEX)</button>
-      <button onclick="checkAnswer(this, false)">D. Document findings in the medical record (STR)</button>
-    </div>
-    <div class="rationale" id="rationale">
-      <b>Correct Mechanism:</b> Signs indicate possible hemorrhage requiring immediate assessment and notification.<br><br>
-      <b>Option Review:</b><br>
-      A — ✅ Correct: Immediate assessment & notifying the surgeon addresses hemodynamic instability.<br>
-      B — ❌ Pain control does not address urgent instability.<br>
-      C — ❌ Reassurance delays critical intervention.<br>
-      D — ❌ Documentation alone is unsafe without action.
-    </div>
-  </div>
-
-  <div id="navigation">
+<div id="examScreen">
+    <div id="questionContainer"></div>
     <button onclick="nextQuestion()">Next</button>
-  </div>
 </div>
 
 <script>
-function checkAnswer(button, isCorrect) {
-  // Disable all buttons after selection
-  const buttons = button.parentElement.querySelectorAll('button');
-  buttons.forEach(b => b.disabled = true);
+let currentQuestionIndex = 0;
 
-  // Highlight correct/incorrect
-  if (isCorrect) {
-    button.classList.add('correct');
-  } else {
-    button.classList.add('incorrect');
-    // Optionally highlight the correct answer
-    buttons.forEach(b => {
-      if (b.textContent.startsWith("A.")) b.classList.add('correct');
-    });
+// ==================== BATCH 1-20 ====================
+const questionsBatch1 = [
+{
+  q: "When the nurse put the baby with high temperature in to cold water the baby will lose temperature through?",
+  options: [
+    { text: "Evaporation", tag: "NCLEX" },
+    { text: "Convection", tag: "SCFHS" },
+    { text: "Conduction", tag: "SAFE_DELAY" },
+    { text: "Radiation", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Heat loss occurs by convection when the body is exposed to moving cooler fluid such as water.",
+    distractors: {
+      NCLEX: "Evaporation requires liquid to gas conversion such as sweating.",
+      SAFE_DELAY: "Conduction requires direct contact with a solid surface.",
+      STR: "Radiation involves transfer of heat without contact."
+    }
   }
+},
+{
+  q: "A patient is admitted to the emergency department after sustaining abdominal injuries and a broken femur from a motor vehicle accident. The patient is pale, diaphoretic, and is not talking coherently. Vital signs upon admission are temperature 98.0 F (36.3 C), heart rate 130 beats/minute, respiratory rate 34 breaths/minute, blood pressure 50/40 mmHg. The healthcare provider suspects which type of shock?",
+  options: [
+    { text: "Hypovolemic", tag: "SCFHS" },
+    { text: "Cardiogenic", tag: "NCLEX" },
+    { text: "Distributive", tag: "SAFE_DELAY" },
+    { text: "Septic", tag: "STR" }
+  ],
+  correctTag: "SCFHS",
+  rationale: {
+    correct: "Massive trauma with hypotension, tachycardia, and signs of poor perfusion indicate hypovolemic shock due to blood loss.",
+    distractors: {
+      NCLEX: "Cardiogenic shock is related to pump failure, not acute trauma.",
+      SAFE_DELAY: "Distributive shock involves vasodilation rather than volume loss.",
+      STR: "Septic shock develops from infection, not acute injury."
+    }
+  }
+},
+// ... add remaining 18 questions for batch 1 here
+];
 
-  // Show rationale
-  document.getElementById('rationale').style.display = 'block';
+// ==================== BATCH 21-40 ====================
+const questionsBatch2 = [
+ const questions = [
+  {
+    q: "When the nurse put the baby with high temperature in to cold water the baby will lose temperature through?",
+    options: [
+      { text: "Evaporation", tag: "NCLEX" },
+      { text: "Convection", tag: "SCFHS" },
+      { text: "Conduction", tag: "SAFE_DELAY" },
+      { text: "Radiation", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    rationale: {
+      correct: "Heat loss occurs by convection when the body is exposed to moving cooler fluid such as water.",
+      distractors: {
+        NCLEX: "Evaporation requires liquid to gas conversion such as sweating.",
+        SAFE_DELAY: "Conduction requires direct contact with a solid surface.",
+        STR: "Radiation involves transfer of heat without contact."
+      }
+    }
+  },
+  {
+    q: "When a nurse places a febrile infant into cold water as an emergency intervention, through which mechanism will the infant primarily lose body heat?",
+    options: [
+      { text: "Evaporation", tag: "SAFE_DELAY" },
+      { text: "Convection", tag: "NCLEX" },
+      { text: "Conduction", tag: "SCFHS" },
+      { text: "Radiation", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    rationale: {
+      correct: "Direct contact between the infant’s body and cold water causes heat loss through conduction.",
+      distractors: {
+        SAFE_DELAY: "Evaporation involves vaporization of liquid, not immersion.",
+        NCLEX: "Convection involves heat loss via air or fluid movement, not direct contact.",
+        STR: "Radiation involves transfer of heat without physical contact."
+      }
+    }
+  },
+  {
+    q: "A patient is admitted to the emergency department after sustaining abdominal injuries and a broken femur from a motor vehicle accident. The patient is pale, diaphoretic, and is not talking coherently. Vital signs upon admission are temperature 98.0 F (36.3 C), heart rate 130 beats/minute, respiratory rate 34 breaths/minute, blood pressure 50/40 mmHg. The healthcare provider suspects which type of shock?",
+    options: [
+      { text: "Hypovolemic", tag: "SCFHS" },
+      { text: "Cardiogenic", tag: "NCLEX" },
+      { text: "Distributive", tag: "SAFE_DELAY" },
+      { text: "Septic", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    rationale: {
+      correct: "Massive trauma with hypotension, tachycardia, and signs of poor perfusion indicate hypovolemic shock due to blood loss.",
+      distractors: {
+        NCLEX: "Cardiogenic shock is related to pump failure, not acute trauma.",
+        SAFE_DELAY: "Distributive shock involves vasodilation rather than volume loss.",
+        STR: "Septic shock develops from infection, not acute injury."
+      }
+    }
+  },
+  {
+    q: "The clinic nurse is assessing jaundice in a child with hepatitis. Which anatomical area would provide the best data regarding the presence of jaundice?",
+    options: [
+      { text: "The sclera", tag: "SCFHS" },
+      { text: "The nail beds", tag: "NCLEX" },
+      { text: "The skin in the sacral area", tag: "SAFE_DELAY" },
+      { text: "The membranes in the ear canal", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    rationale: {
+      correct: "Jaundice is most accurately assessed in the sclera due to high bilirubin deposition.",
+      distractors: {
+        NCLEX: "Nail beds are less reliable indicators.",
+        SAFE_DELAY: "Skin assessment may be affected by pigmentation.",
+        STR: "Ear canal membranes are not standard assessment sites."
+      }
+    }
+  },
+  {
+    q: "A postoperative client suddenly develops shortness of breath, chest pain, and anxiety. Oxygen saturation is 86%. What is the nurse’s PRIORITY action?",
+    options: [
+      { text: "Apply high-flow oxygen via non-rebreather mask", tag: "SCFHS" },
+      { text: "Notify the healthcare provider immediately", tag: "NCLEX" },
+      { text: "Place the client in high-Fowler’s position", tag: "SAFE_DELAY" },
+      { text: "Assess lung sounds", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    rationale: {
+      correct: "Suspected pulmonary embolism requires immediate oxygenation to prevent hypoxia.",
+      distractors: {
+        NCLEX: "Provider notification follows stabilization.",
+        SAFE_DELAY: "Positioning alone is insufficient.",
+        STR: "Assessment must not delay oxygen delivery."
+      }
+    }
+  },
+  {
+    q: "The nurse is caring for a client receiving IV potassium chloride. Which assessment finding requires IMMEDIATE intervention?",
+    options: [
+      { text: "Irregular heart rhythm on monitor", tag: "SCFHS" },
+      { text: "Pain at the IV insertion site", tag: "NCLEX" },
+      { text: "Serum potassium level of 3.4 mEq/L", tag: "SAFE_DELAY" },
+      { text: "Decreased appetite", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    rationale: {
+      correct: "Potassium affects cardiac conduction; dysrhythmias indicate life-threatening toxicity.",
+      distractors: {
+        NCLEX: "IV irritation is common.",
+        SAFE_DELAY: "Mild hypokalemia is expected.",
+        STR: "Appetite changes are non-urgent."
+      }
+    }
+  },
+  {
+    q: "A client with diabetic ketoacidosis is receiving insulin infusion. Which outcome indicates treatment effectiveness?",
+    options: [
+      { text: "Blood glucose decreases gradually", tag: "SCFHS" },
+      { text: "Urine ketones increase", tag: "SAFE_DELAY" },
+      { text: "Serum potassium rises rapidly", tag: "NCLEX" },
+      { text: "Respiratory rate increases", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    rationale: {
+      correct: "Gradual glucose reduction indicates effective insulin therapy.",
+      distractors: {
+        SAFE_DELAY: "Ketones should decrease.",
+        NCLEX: "Potassium often drops, not rises.",
+        STR: "Respiratory compensation should improve."
+      }
+    }
+  },
+  {
+    q: "Which client should the nurse assess FIRST?",
+    options: [
+      { text: "Client with asthma using accessory muscles", tag: "SCFHS" },
+      { text: "Client with diabetes reporting hunger", tag: "SAFE_DELAY" },
+      { text: "Client with hypertension and BP 150/90", tag: "NCLEX" },
+      { text: "Client with postoperative pain rated 6/10", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    rationale: {
+      correct: "Use of accessory muscles indicates respiratory distress and impending failure.",
+      distractors: {
+        SAFE_DELAY: "Hunger is non-urgent.",
+        NCLEX: "BP is mildly elevated.",
+        STR: "Pain is important but not priority."
+      }
+    }
+  },
+  {
+    q: "A client receiving blood transfusion develops chills and fever. What is the nurse’s FIRST action?",
+    options: [
+      { text: "Stop the transfusion immediately", tag: "SCFHS" },
+      { text: "Administer antipyretics", tag: "SAFE_DELAY" },
+      { text: "Slow the infusion rate", tag: "NCLEX" },
+      { text: "Document the findings", tag: "STR" }
+    ],
+    correctTag: "SCFHS",
+    rationale: {
+      correct: "Signs of transfusion reaction require immediate cessation to prevent harm.",
+      distractors: {
+        SAFE_DELAY: "Medication must not delay stopping transfusion.",
+        NCLEX: "Slowing does not prevent reaction.",
+        STR: "Documentation follows intervention."
+      }
+    }
+  }
+];
+];
+
+// ==================== BATCH 41-60 ====================
+const questionsBatch3 = [
+ 
+];
+
+// Merge all batches
+const questions = [...questionsBatch1, ...questionsBatch2, ...questionsBatch3];
+
+function startExam() {
+    const studentName = document.getElementById("studentName").value;
+    const studentID = document.getElementById("studentID").value;
+    if (!studentName || !studentID) {
+        alert("Please enter Name and ID.");
+        return;
+    }
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("examScreen").style.display = "block";
+    loadQuestion();
+}
+
+function loadQuestion() {
+    if (currentQuestionIndex >= questions.length) {
+        document.getElementById("questionContainer").innerHTML = "<h3>Exam Completed!</h3>";
+        return;
+    }
+    const q = questions[currentQuestionIndex];
+    let html = `<div class="question"><h3>Q${currentQuestionIndex + 1}. ${q.q}</h3><div class="options">`;
+    q.options.forEach((opt, idx) => {
+        html += `<button onclick="checkAnswer('${opt.tag}')">${opt.text}</button>`;
+    });
+    html += "</div></div>";
+    document.getElementById("questionContainer").innerHTML = html;
+}
+
+function checkAnswer(selectedTag) {
+    const q = questions[currentQuestionIndex];
+    const buttons = document.querySelectorAll(".options button");
+    buttons.forEach(btn => btn.disabled = true);
+
+    buttons.forEach(btn => {
+        if (btn.innerText === q.options.find(o => o.tag === q.correctTag).text) {
+            btn.classList.add("correct");
+        } else if (btn.innerText === q.options.find(o => o.tag === selectedTag).text) {
+            btn.classList.add("incorrect");
+        }
+    });
+
+    setTimeout(() => nextQuestion(), 1000);
 }
 
 function nextQuestion() {
-  alert("Move to next question functionality goes here.");
-  // You can add logic to load the next question dynamically
+    currentQuestionIndex++;
+    loadQuestion();
 }
 </script>
-
 </body>
 </html>
